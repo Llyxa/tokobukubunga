@@ -94,6 +94,51 @@
                 });
             }
         })
+        $(document).ready(function () {
+            $(document).on('click', '.btn-del', function () {
+                var id = $(this).data('id');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                })
+                    .then((result) => {
+                        if (result.value) {
+                            $.ajax({
+                                'url': '{{url('warna')}}/' + id,
+                                'type': 'post',
+                                'data': {
+                                    '_method': 'DELETE',
+                                    '_token': '{{csrf_token()}}'
+                                },
+                                success: function (response) {
+                                    if (response == 1) {
+                                        toastr.success('Data berhasil dihapus!', 'Berhasil!', {
+                                            closeButton: true,
+                                            tapToDismiss: false
+                                        });
+                                        location.reload();
+                                    } else {
+                                        toastr.error('Data gagal dihapus!', 'Gagal!', {
+                                            closeButton: true,
+                                            tapToDismiss: false
+                                        });
+                                    }
+                                }
+                            });
+                        } else {
+                            console.log(`dialog was dismissed by ${result.dismiss}`)
+                        }
+
+                    });
+            });
+
+        });
     </script>
 </body>
 <!-- END: Body-->
