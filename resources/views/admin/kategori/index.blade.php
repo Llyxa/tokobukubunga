@@ -44,7 +44,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
+                                        <th>Nomor</th>
                                         <th>Kategori</th>
                                         <th>Aksi</th>
                                     </tr>
