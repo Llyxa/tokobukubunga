@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Genre extends Model
 {
     use HasFactory;
-
     protected $guarded = ['id'];
+
     public function products(){
         return $this->hasMany(Product::class);
     }
