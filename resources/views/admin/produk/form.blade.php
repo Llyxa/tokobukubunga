@@ -1,4 +1,5 @@
 @extends('admin.layouts.app')
+@section('listbuku', 'active')
 @section('title')
      Form {{@$produk ? ' Ubah' : ' Tambah'}}
 @endsection
@@ -60,12 +61,12 @@
         </div>
         <div class="content-body">
             <!-- Basic Vertical form layout section start -->
-            <section id="basic-vertical-layouts">
+            <section id="multiple-column-form">
                 <div class="row">
-                    <div class="col-md-6 col-12">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Vertical Form</h4>
+                                <h4 class="card-title">Form</h4>
                             </div>
                             <div class="card-body">
                                 @if ($errors->any())
@@ -80,7 +81,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                <form class="form form-vertical" action="{{@$produk ? route('produk.update',$produk->id) : route('produk.store')}}"
+                                <form class="form" action="{{@$produk ? route('produk.update',$produk->id) : route('produk.store')}}"
                                     method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @if(@$produk)
@@ -120,19 +121,15 @@
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="penulis">Penulis</label>
-                                                <input type="text" id="penulis" class="form-control" name="penulis" placeholder="Penulis" value="{{old('penulis', @$produk ? $produk->id : '')}}">
+                                                <input type="text" id="penulis" class="form-control" name="penulis" placeholder="Penulis" value="{{old('penulis', @$produk ? $produk->penulis : '')}}">
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="penerbit">Penerbit</label>
-                                                <select class="form-control" id="basicSelect" name="publisher_id">
-                                                    @foreach ($penerbit as $item)
-                                                        @if (old('penerbit', @$penerbit ? $item->id : '') == $item->id)
-                                                            <option value="{{ $item->id }}" selected> {{ $item->penerbit }}</option>
-                                                        @else
-                                                            <option value="{{ $item->id }}"> {{ $item->penerbit }}</option>
-                                                        @endif
+                                                <select class="form-select form-control" id="publisher_id" name="publisher_id" >
+                                                    @foreach($penerbit as $row)
+                                                        <option value="{{$row->id}}" {{@$produk && $produk->publisher_id == $row->id ? 'selected' : '' }}>{{$row->penerbit}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -140,31 +137,27 @@
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="sinopsis">Sinopsis</label>
-                                                <input type="text" id="sinopsis" class="form-control" name="sinopsis" placeholder="Sinopsis" value="{{old('nama', @$produk ? $produk->sinopsis : '')}}">
+                                                <textarea id="exampleFormControlTextarea1" class="form-control" rows="4" name="sinopsis" placeholder="Sinopsis" value="">{{old('sinopsis', @$produk ? $produk->sinopsis : '')}}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="harga">Harga</label>
-                                                <input type="number" min="0" id="harga" class="form-control" name="harga" placeholder="Harga" value="{{old('nama', @$produk ? $produk->harga : '')}}">
+                                                <input type="number" min="0" id="harga" class="form-control" name="harga" placeholder="Harga" value="{{old('harga', @$produk ? $produk->harga : '')}}">
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="stok">Stok</label>
-                                                <input type="number" min="0" id="stok" class="form-control" name="stok" placeholder="Stok" value="{{old('nama', @$produk ? $produk->stok : '')}}">
+                                                <input type="number" min="0" id="stok" class="form-control" name="stok" placeholder="Stok" value="{{old('stok', @$produk ? $produk->stok : '')}}">
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="kategori">Kategori</label>
-                                                <select class="form-control" id="basicSelect" name="category_id">
-                                                    @foreach ($kategori as $item)
-                                                        @if (old('kategori', @$kategori ? $item->id : '') == $item->id)
-                                                            <option value="{{ $item->id }}" selected> {{ $item->kategori }}</option>
-                                                        @else
-                                                            <option value="{{ $item->id }}"> {{ $item->kategori }}</option>
-                                                        @endif
+                                                <select class="form-select form-control" id="category_id" name="category_id" >
+                                                    @foreach($kategori as $row)
+                                                        <option value="{{$row->id}}" {{@$produk && $produk->category_id == $row->id ? 'selected' : '' }}>{{$row->kategori}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -173,16 +166,22 @@
                                             <div class="form-group">
                                                 <label for="genre">Genre</label>
                                                 <div class="demo-inline-spacing">
-                                                    @foreach ($genre as $item)
+                                                    {{-- @foreach ($genre as $item)
                                                         <div class="custom-control custom-checkbox">
                                                             @if (old('genre', @$genre ? $item->id : '') == $item->id)
-                                                                <input type="checkbox" class="custom-control-input" id="customCheck1" name="genre_id" value="{{ $item->id }}" checked>
-                                                                <label class="custom-control-label" for="customCheck1">{{ $item->genre }}
+                                                                <input type="checkbox" class="" id="" name="genre_id" value="{{ $item->id }}" checked>
+                                                                <label class="" for="">{{ $item->genre }}
                                                             @else
-                                                                <input type="checkbox" class="custom-control-input" id="customCheck1" name="genre_id" value="{{ $item->id }}">
-                                                                <label class="custom-control-label" for="customCheck1">{{ $item->genre }}</label>
+                                                                <input type="checkbox" class="" id="" name="genre_id" value="{{ $item->id }}">
+                                                                <label class="" for="customCheck1">{{ $item->genre }}</label>
                                                             @endif
                                                         </div>
+                                                    @endforeach --}}
+                                                    @foreach($genre as $row)
+                                                    <div class="custom-control custom-checkbox mt-0">
+                                                        <input type="checkbox" class="custom-control-input" id="customCheck" name="genre_id" value="{{$row->id}}" {{@$produk && $produk->genre_id == $row->id ? 'checked' : '' }}>
+                                                        <label class="custom-control-label" for="customCheck"></label>{{$row->genre}}
+                                                    </div>
                                                     @endforeach
                                                 </div>
                                             </div>

@@ -1,4 +1,5 @@
 @extends('admin.layouts.app')
+@section('kategori', 'active')
 @section('title','Data Kategori')
 
 @section('content')
@@ -93,7 +94,7 @@
                     .then((result) => {
                         if (result.value) {
                             $.ajax({
-                                'url': '{{url('warna')}}/' + id,
+                                'url': '{{url('kategori')}}/' + id,
                                 'type': 'post',
                                 'data': {
                                     '_method': 'DELETE',

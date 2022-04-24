@@ -74,6 +74,7 @@
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{asset('assets')}}/admin/vendors/js/charts/apexcharts.min.js"></script>
     <script src="{{asset('assets')}}/admin/vendors/js/extensions/toastr.min.js"></script>
+    <script src="{{asset('assets')}}/admin/vendors/js/extensions/sweetalert2.all.min.js"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
@@ -95,51 +96,26 @@
             }
         })
         $(document).ready(function () {
-            $(document).on('click', '.btn-del', function () {
-                var id = $(this).data('id');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    type: 'error',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                })
-                    .then((result) => {
-                        if (result.value) {
-                            $.ajax({
-                                'url': '{{url('warna')}}/' + id,
-                                'type': 'post',
-                                'data': {
-                                    '_method': 'DELETE',
-                                    '_token': '{{csrf_token()}}'
-                                },
-                                success: function (response) {
-                                    if (response == 1) {
-                                        toastr.success('Data berhasil dihapus!', 'Berhasil!', {
-                                            closeButton: true,
-                                            tapToDismiss: false
-                                        });
-                                        location.reload();
-                                    } else {
-                                        toastr.error('Data gagal dihapus!', 'Gagal!', {
-                                            closeButton: true,
-                                            tapToDismiss: false
-                                        });
-                                    }
-                                }
-                            });
-                        } else {
-                            console.log(`dialog was dismissed by ${result.dismiss}`)
-                        }
-
-                    });
+            @if(Session::has('success'))
+            var success = '{{Session::get("success")}}';
+            toastr.success(success, 'Berhasil!', {
+                closeButton: true,
+                tapToDismiss: false
             });
-
+            @endif
+    
+        });
+        $(document).ready(function () {
+            @if(Session::has('error'))
+            var success = '{{Session::get("error")}}';
+            toastr.error(success, 'Gagal!', {
+                closeButton: true,
+                tapToDismiss: false
+            });
+            @endif
         });
     </script>
+    @stack('scripts')
 </body>
 <!-- END: Body-->
 

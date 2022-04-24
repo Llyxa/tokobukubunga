@@ -36,12 +36,12 @@
             <li><a class="d-flex align-items-center" href="{{url('/home')}}"><i data-feather="home"></i><span class="menu-item text-truncate" data-i18n="Analytics">Home</span></a>
             </li>
 
-            <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Apps &amp; Pages</span><i data-feather="more-horizontal"></i>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{route('produk.index')}}"><i data-feather="grid"></i><span class="menu-title text-truncate" data-i18n="Kanban">List Buku</span></a>
+            <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Admin</span><i data-feather="more-horizontal"></i>
+            <li class="@yield('listbuku')"><a class="d-flex align-items-center" href="{{route('produk.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">List Buku</span></a>
             </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{route('kategori.index')}}"><i data-feather="grid"></i><span class="menu-title text-truncate" data-i18n="Kanban">Kategori</span></a>
+            <li class="@yield('kategori')"><a class="d-flex align-items-center" href="{{route('kategori.index')}}"><i data-feather="grid"></i><span class="menu-title text-truncate" data-i18n="Kanban">Kategori</span></a>
             </li>
-            <li class=" nav-item"><a class="d-flex align-items-center" href="{{route('genre.index')}}"><i data-feather="grid"></i><span class="menu-title text-truncate" data-i18n="Kanban">Genre</span></a>
+            <li class="@yield('genre')"><a class="d-flex align-items-center" href="{{route('genre.index')}}"><i data-feather='feather'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Genre</span></a>
             </li>
             <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Invoice</span></a>
                 <ul class="menu-content">

@@ -1,10 +1,9 @@
 @extends('admin.layouts.app')
+@section('genre', 'active')
 @section('title')
      Form {{@$genre ? ' Ubah' : ' Tambah'}}
 @endsection
 @section('content')
-
-
 <div class="app-content content ">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>

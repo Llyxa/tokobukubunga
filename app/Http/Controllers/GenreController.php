@@ -26,6 +26,7 @@ class GenreController extends Controller
      */
     public function create()
     {
+        // return "Hello World";
         return view('admin.genre.form');
     }
 
@@ -124,8 +125,9 @@ class GenreController extends Controller
         $status = $genre->delete();
         if ($status){
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }
+
 }

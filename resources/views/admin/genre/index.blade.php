@@ -1,4 +1,5 @@
 @extends('admin.layouts.app')
+@section('genre', 'active')
 @section('title','Data Genre')
 
 @section('content')
@@ -57,6 +58,11 @@
                                             <td>
                                                 <a href="{{route('genre.edit', $row->id)}}" class="btn btn-warning waves-effect waves-float waves-light">Edit</a>
                                                 <a href="#" data-id="{{$row->id}}" class="btn btn-danger btn-del waves-effect waves-float waves-light">Delete</a>
+                                                {{-- <form action="{{ route('genre.destroy', $row->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -93,7 +99,7 @@
                     .then((result) => {
                         if (result.value) {
                             $.ajax({
-                                'url': '{{url('warna')}}/' + id,
+                                'url': '{{url('genre')}}/' + id,
                                 'type': 'post',
                                 'data': {
                                     '_method': 'DELETE',

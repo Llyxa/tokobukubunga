@@ -171,7 +171,6 @@ class ProdukController extends Controller
      */
     public function create()
     {
-        $data['product'] = Product::all();
         $data['kategori'] = Category::all();
         $data['genre'] = Genre::all();
         $data['penerbit'] = Publisher::all();
@@ -186,10 +185,10 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
+        $request->validate([
             'category_id' => 'required',
             'publisher_id' => 'required',
-            'genre_id' => 'required',
+            'genre_id' => 'accepted',
             'judul' => 'required|string',
             'penulis' => 'required|string',
             'sinopsis' => 'required|string',
@@ -197,16 +196,25 @@ class ProdukController extends Controller
             'stok' => 'required|numeric',
             'image' => 'required',
             'image.*' => 'image|mimes:jpeg,png,jpg|max:2048'
-        ];
-        
+        ]);
         $imageName = time() . '.' . $request->image->extension();
         $request->image->move(public_path() . '/storage/foto/', $imageName);
+        $produk = Product::create([
+            'category_id' => $request['category_id'],
+            'publisher_id' => $request['publisher_id'],
+            'genre_id' => $request['genre_id'],
+            'judul' => $request['judul'],
+            'penulis' => $request['penulis'],
+            'sinopsis' => $request['sinopsis'],
+            'harga' => $request['harga'],
+            'stok' => $request['stok'],
+            'image' => $imageName
+        ]);
 
-        $input = $request->all();
-        $status = Product::create($input);
-
-        if ($status){
+        if ($produk){
             return redirect()->route('produk.index')->with('success', 'Data berhasil ditambahkan');
+        } else {
+            return redirect()->route('produk.create')->with('error', 'Data gagal ditambahkan');
         }
         
         //Start Validation
@@ -238,7 +246,11 @@ class ProdukController extends Controller
      */
     public function show($id)
     {
-        //
+        $data['product'] = Product::find($id);
+        $data['publisher'] = Publisher::find($id);
+        $data['category'] = Category::find($id);
+        $data['genre'] = Genre::find($id);
+        return view('admin.produk.detail', $data);
     }
 
     /**
@@ -250,6 +262,9 @@ class ProdukController extends Controller
     public function edit($id)
     {
         $data['produk'] = Product::find($id);
+        $data['kategori'] = Category::all();
+        $data['genre'] = Genre::all();
+        $data['penerbit'] = Publisher::all();
         return view('admin.produk.form', $data);
     }
 
@@ -262,25 +277,41 @@ class ProdukController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Start Validation
-        $rules = [
-            'produk' => 'required|unique:produks',
-        ];
-
-        $customMessages = [
-            'produk.required' => 'Produk wajib diisi!',
-            'produk.unique' => 'Produk sudah digunakan!',
-        ];
-
-        $this->validate($request, $rules, $customMessages);
-
-        //Start Input
+        $request->validate([
+            'category_id' => 'required',
+            'publisher_id' => 'required',
+            'genre_id' => 'accepted',
+            'judul' => 'required|string',
+            'penulis' => 'required|string',
+            'sinopsis' => 'required|string',
+            'harga' => 'required|numeric',
+            'stok' => 'required|numeric',
+        ]);
         $produk = Product::find($id);
-        $update = $request->all();
-        $status = $produk->update($update);
 
-        if ($status){
+        if ($request->image){
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path() . '/storage/foto/', $imageName);
+        } else {
+            $imageName = $produk->image;
+        }
+
+        $produk->update([
+            'category_id' => $request['category_id'],
+            'publisher_id' => $request['publisher_id'],
+            'genre_id' => $request['genre_id'],
+            'judul' => $request['judul'],
+            'penulis' => $request['penulis'],
+            'sinopsis' => $request['sinopsis'],
+            'harga' => $request['harga'],
+            'stok' => $request['stok'],
+            'image' => $imageName
+        ]);
+
+        if ($produk){
             return redirect()->route('produk.index')->with('success', 'Data berhasil diubah');
+        } else {
+            return redirect()->route('produk.create')->with('error', 'Data gagal diubah');
         }
     }
 
@@ -290,15 +321,15 @@ class ProdukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         $produk = Product::find($id);
         $status = $produk->delete();
         if ($status){
-            return 1;
+            return redirect()->route('produk.index')->with('success','Data berhasil dihapus');
         }else{
-            return 0;
+            return redirect()->route('produk.detail')->with('error','Data gagal dihapus');
         }
     }
+
 }
 
