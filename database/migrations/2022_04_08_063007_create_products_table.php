@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('category_id');
             $table->foreignId('publisher_id');
-            $table->foreignId('genre_id');
+            $table->string('genre_id');
             $table->string('judul');
             $table->string('penulis');
             $table->mediumText('sinopsis');

@@ -5,6 +5,9 @@
 @section('content')
 
 <style>
+     #fotofoto {
+        width: 100%;
+    }
     .card {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         text-align: center;
@@ -45,9 +48,6 @@
             </div>
         </div>
         <div class="content-body">
-            <div class="header">
-                <a href="{{route('produk.create')}}" class="btn btn-primary waves-effect waves-float waves-light">Tambah produk</a>
-            </div>
             <h6 class="my-2 text-muted">Recently Added</h6>
             <section id="card-content-types">
                 <div class="row row-cols-5">

@@ -179,10 +179,12 @@
                                                     @endforeach --}}
                                                     @foreach($genre as $row)
                                                     <div class="custom-control custom-checkbox mt-0">
-                                                        <input type="checkbox" class="custom-control-input" id="customCheck" name="genre_id" value="{{$row->id}}" {{@$produk && $produk->genre_id == $row->id ? 'checked' : '' }}>
-                                                        <label class="custom-control-label" for="customCheck"></label>{{$row->genre}}
+                                                        <label >
+                                                            <input type="checkbox" name="genre_id[]" value="{{$row->id}}">{{$row->genre}}
+                                                        </label>
                                                     </div>
                                                     @endforeach
+                                                    
                                                 </div>
                                             </div>
                                         </div>

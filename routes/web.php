@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProdukController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,15 +33,15 @@ Auth::routes();
     // Route::get('/category/{category:kategori}', [BukuController::class, 'category'])->name('category');
     Route::get('/genres', [BukuController::class, 'genres'])->name('genres');
     // Route::get('/genre/{genre:genre}', [BukuController::class, 'genre'])->name('genre');
-    // Route::get('/checkout', [BukuController::class, 'checkout'])->name('checkout');
+    Route::get('/checkout', [ProdukController::class, 'checkout'])->name('checkout');
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
+    //Start Produk
+    Route::resource('produk', \App\Http\Controllers\ProdukController::class);
 
-//Start Produk
-Route::resource('produk', \App\Http\Controllers\ProdukController::class);
-Route::resource('produk-detail',\App\Http\Controllers\ProdukDetailController::class);
-
-//Start Master
-Route::resource('kategori', \App\Http\Controllers\KategoriController::class);
-Route::resource('genre', \App\Http\Controllers\GenreController::class);
+    //Start Master
+    Route::resource('kategori', \App\Http\Controllers\KategoriController::class);
+    Route::resource('genre', \App\Http\Controllers\GenreController::class);
+    Route::resource('penerbit', \App\Http\Controllers\PenerbitController::class);

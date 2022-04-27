@@ -14,4 +14,5 @@ class Genre extends Model
     public function products(){
         return $this->hasMany(Product::class);
     }
+
 }

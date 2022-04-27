@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\Publisher;
 use Psy\Util\Str;
 
-class KategoriController extends Controller
+class PenerbitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $data['kategori'] = Category::all();
-        return view('admin.kategori.index', $data);
+        $data['penerbit'] = Publisher::all();
+        return view('admin.penerbit.index', $data);
     }
 
     /**
@@ -26,7 +26,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        return view('admin.kategori.form');
+        return view('admin.penerbit.form');
     }
 
     /**
@@ -39,22 +39,22 @@ class KategoriController extends Controller
     {
         //Start Validation
         $rules = [
-            'kategori' => 'required|unique:categories',
+            'penerbit' => 'required|unique:publishers',
         ];
 
         $customMessages = [
-            'kategori.required' => 'Kategori wajib diisi!',
-            'kategori.unique' => 'Kategori sudah digunakan!',
+            'penerbit.required' => 'penerbit wajib diisi!',
+            'penerbit.unique' => 'penerbit sudah digunakan!',
         ];
 
         $this->validate($request, $rules, $customMessages);
 
         //Start Input
         $input = $request->all();
-        $status = Category::create($input);
+        $status = Publisher::create($input);
 
         if ($status){
-            return redirect()->route('kategori.index')->with('success', 'Data Warna berhasil ditambahkan');
+            return redirect()->route('penerbit.index')->with('success', 'Data Warna berhasil ditambahkan');
         }
     }
 
@@ -77,8 +77,8 @@ class KategoriController extends Controller
      */
     public function edit($id)
     {
-        $data['kategori'] = Category::find($id);
-        return view('admin.kategori.form', $data);
+        $data['penerbit'] = Publisher::find($id);
+        return view('admin.penerbit.form', $data);
     }
 
     /**
@@ -92,23 +92,23 @@ class KategoriController extends Controller
     {
         //Start Validation
         $rules = [
-            'kategori' => 'required|unique:categories',
+            'penerbit' => 'required|unique:publishers',
         ];
 
         $customMessages = [
-            'kategori.required' => 'Kategori wajib diisi!',
-            'kategori.unique' => 'Kategori sudah digunakan!',
+            'penerbit.required' => 'penerbit wajib diisi!',
+            'penerbit.unique' => 'penerbit sudah digunakan!',
         ];
 
         $this->validate($request, $rules, $customMessages);
 
         //Start Input
-        $kategori = Category::find($id);
+        $penerbit = Publisher::find($id);
         $update = $request->all();
-        $status = $kategori->update($update);
+        $status = $penerbit->update($update);
 
         if ($status){
-            return redirect()->route('kategori.index')->with('success', 'Data berhasil diubah');
+            return redirect()->route('penerbit.index')->with('success', 'Data berhasil diubah');
         }
     }
 
@@ -120,8 +120,8 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        $kategori = Category::find($id);
-        $status = $kategori->delete();
+        $penerbit = Publisher::find($id);
+        $status = $penerbit->delete();
         if ($status){
             return 1;
         }else{

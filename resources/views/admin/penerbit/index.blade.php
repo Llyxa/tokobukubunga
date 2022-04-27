@@ -1,19 +1,8 @@
 @extends('admin.layouts.app')
-@section('listbuku', 'active')
-@section('title','Data produk')
+@section('penerbit', 'active')
+@section('title','Data Penerbit')
 
 @section('content')
-
-<style>
-    .card {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        text-align: center;
-        transition: transform .2s;
-    }
-    .card:hover{
-        transform: scale(1.03);
-    }
-</style>
 
 <div class="app-content content ">
     <div class="content-overlay"></div>
@@ -23,12 +12,12 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Data produk</h2>
+                        <h2 class="content-header-title float-left mb-0">Data Penerbit</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html">Home</a>
                                 </li>
-                                <li class="breadcrumb-item active">Data produk
+                                <li class="breadcrumb-item active">Data Penerbit
                                 </li>
                             </ol>
                         </div>
@@ -45,31 +34,40 @@
             </div>
         </div>
         <div class="content-body">
-            <div class="header">
-                <a href="{{route('produk.create')}}" class="btn btn-primary waves-effect waves-float waves-light">Tambah produk</a>
-            </div>
-            <h6 class="my-2 text-muted">Recently Added</h6>
-            <section id="card-content-types">
-                <div class="row row-cols-5">
-                    @foreach ($produk as $item)
-                    <div class="col">
-                        <div class="card h-90">
-                            <a href="{{route('produk.show', $item->id)}}" style="padding: 10px;">
-                                <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px;"/>
-                            </a>
-                            <div class="card-body">
-                                <p class="card-title font-weight-bolder mt-0 mb-1">{{$item->judul}}</p>
-                                <p class="card-text">{{$item->penulis}}</p>
-                            </div>
-                            {{-- <div class="card-body">
-                                <a href="{{route('produk.edit', $item->id)}}" class="card-link">Edit</a>
-                                <a href="#" data-id="{{$item->id}}" class="card-link">Delete</a>
-                            </div> --}}
+            <!-- Basic Tables start -->
+            <div class="row" id="basic-table">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{{route('penerbit.create')}}" class="btn btn-primary waves-effect waves-float waves-light">Tambah Penerbit</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Penerbit</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($penerbit as $row)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$row->penerbit}}</td>
+                                            <td>
+                                                <a href="{{route('penerbit.edit', $row->id)}}" class="btn btn-warning waves-effect waves-float waves-light">Edit</a>
+                                                <a href="#" data-id="{{$row->id}}" class="btn btn-danger btn-del waves-effect waves-float waves-light">Delete</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    @endforeach                    
                 </div>
-            </section>
+            </div>
+            <!-- Basic Tables end -->
         </div>
     </div>
 </div>
@@ -96,7 +94,7 @@
                     .then((result) => {
                         if (result.value) {
                             $.ajax({
-                                'url': '{{url('produk')}}/' + id,
+                                'url': '{{url('penerbit')}}/' + id,
                                 'type': 'post',
                                 'data': {
                                     '_method': 'DELETE',
@@ -104,16 +102,16 @@
                                 },
                                 success: function (response) {
                                     if (response == 1) {
-                                        toastr.error('Data gagal dihapus!', 'Gagal!', {
-                                            closeButton: true,
-                                            tapToDismiss: false
-                                        });
-                                    } else {
                                         toastr.success('Data berhasil dihapus!', 'Berhasil!', {
                                             closeButton: true,
                                             tapToDismiss: false
                                         });
                                         location.reload();
+                                    } else {
+                                        toastr.error('Data gagal dihapus!', 'Gagal!', {
+                                            closeButton: true,
+                                            tapToDismiss: false
+                                        });
                                     }
                                 }
                             });
@@ -128,4 +126,3 @@
 
     </script>
 @endpush
-

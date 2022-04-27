@@ -186,30 +186,26 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required',
-            'publisher_id' => 'required',
-            'genre_id' => 'accepted',
-            'judul' => 'required|string',
-            'penulis' => 'required|string',
-            'sinopsis' => 'required|string',
-            'harga' => 'required|numeric',
-            'stok' => 'required|numeric',
-            'image' => 'required',
-            'image.*' => 'image|mimes:jpeg,png,jpg|max:2048'
+            'image'      => 'mimes: jpg,png,jpeg'
         ]);
+            
         $imageName = time() . '.' . $request->image->extension();
         $request->image->move(public_path() . '/storage/foto/', $imageName);
-        $produk = Product::create([
-            'category_id' => $request['category_id'],
-            'publisher_id' => $request['publisher_id'],
-            'genre_id' => $request['genre_id'],
-            'judul' => $request['judul'],
-            'penulis' => $request['penulis'],
-            'sinopsis' => $request['sinopsis'],
-            'harga' => $request['harga'],
-            'stok' => $request['stok'],
-            'image' => $imageName
-        ]);
+        
+        $produk = new Product();
+        $produk->category_id =$request->category_id;
+        $produk->publisher_id =$request->publisher_id;
+        $produk->image = $imageName;
+        $produk->judul =$request->judul;
+        $produk->penulis =$request->penulis;
+        $produk->sinopsis =$request->sinopsis;
+        $produk->harga =$request->harga;
+        $produk->stok = $request->stok;
+         
+        //Menggabungkan array dengan tanda koma menjadi string, nanti hasilnya :  Action,Adventure,Animation
+        $genre_id = implode(",", $request->genre_id);
+        $produk->genre_id = $genre_id;
+        $produk->save();
 
         if ($produk){
             return redirect()->route('produk.index')->with('success', 'Data berhasil ditambahkan');
@@ -217,25 +213,7 @@ class ProdukController extends Controller
             return redirect()->route('produk.create')->with('error', 'Data gagal ditambahkan');
         }
         
-        //Start Validation
-        // $rules = [
-        //     'produk' => 'required|unique:produks',
-        // ];
-
-        // $customMessages = [
-        //     'produk.required' => 'Produk wajib diisi!',
-        //     'produk.unique' => 'Produk sudah digunakan!',
-        // ];
-
-        // $this->validate($request, $rules, $customMessages);
-
-        // //Start Input
-        // $input = $request->all();
-        // $status = Produk::create($input);
-
-        // if ($status){
-        //     return redirect()->route('produk.index')->with('success', 'Data berhasil ditambahkan');
-        // }
+        
     }
 
     /**
@@ -330,6 +308,13 @@ class ProdukController extends Controller
             return redirect()->route('produk.detail')->with('error','Data gagal dihapus');
         }
     }
+
+    public function checkout(){
+        $data['product'] = Product::all();
+        return view('admin.checkout.index', $data);
+    }
+
+
 
 }
 

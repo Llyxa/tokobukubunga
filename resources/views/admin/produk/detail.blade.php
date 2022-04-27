@@ -70,22 +70,24 @@
     <!-- BEGIN: Content-->
 
             <div class="content-body">
+                <form id="formD" name="formD" action="" method="post" enctype="multipart/form-data">
                 <!-- app e-commerce details start -->
                 <section class="app-ecommerce-details">
-                    <div class="card">
+                    <div class="card col-lg-8">
                         <!-- Product Details starts -->
-                        <div class="card-body">
-                            <div class="row my-2">
-                                <div class="col-12 col-md-5 d-flex align-items-center justify-content-center mb-2 mb-md-0">
+                        <div class="card-body ">
+                            <div class="row row-cols-2">
+                                <div class="col-12 col-md-3 align-items-center justify-content-center mb-2 mb-md-0">
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <img src="{{ asset ('storage/foto/'. $product->image) }}" class="img-fluid product-img" alt="cover image" style="width: 350px;" />
+                                        <img src="{{ asset ('storage/foto/'. $product->image) }}" class="img-fluid product-img" alt="cover image"/>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-7">
                                     <h4>{{$product->judul}}</h4>
                                     <span class="card-text item-company">Written by <a href="javascript:void(0)" class="company-name">{{$product->penulis}}</a></span>
+                                    
                                     <div class="ecommerce-details-price d-flex flex-wrap mt-1">
-                                        <h4 class="item-price mr-1">Rp. {{$product->harga}}</h4>
+                                        <h4>Rp.</h4><br><input class="item-price mr-1" id="harga" name="harga" value="{{$product->harga}}" disabled="" onkeyup="OnChange(this.value)" onKeyPress="return isNumberKey(event)">
                                         <ul class="unstyled-list list-inline pl-1 border-left">
                                             <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
                                             <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
@@ -116,39 +118,17 @@
                                                 <span class="card-text item-company">Kategori: <a href="javascript:void(0)" class="company-name">{{$product->category->kategori}}</a></span>
                                             </li>
                                             <li>
-                                                <span class="card-text item-company">Genre: <a href="javascript:void(0)" class="company-name">{{@$genre->genre}}</a></span>
+                                                {{-- <span class="card-text item-company">Genre: <a href="javascript:void(0)" class="company-name">{{@$genre->genre}}</a></span> --}}
+                                                <span class="card-text item-company">Genre: 
+                                                    <a a href="javascript:void(0)" class="company-name">
+                                                        @foreach($product as $value)
+                                                            {{$value}}
+                                                        @endforeach
+                                                    </a>
+                                                </span>
                                             </li>
                                         </ul>
                                     <hr />
-                                    <div class="d-flex flex-column flex-sm-row pt-1">
-                                        <a href="javascript:void(0)" class="btn btn-primary btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0">
-                                            <i data-feather="shopping-cart" class="mr-50"></i>
-                                            <span class="add-to-cart">Add to cart</span>
-                                        </a>
-                                        <a href="javascript:void(0)" class="btn btn-outline-secondary btn-wishlist mr-0 mr-sm-1 mb-1 mb-sm-0">
-                                            <i data-feather="heart" class="mr-50"></i>
-                                            <span>Wishlist</span>
-                                        </a>
-                                        <div class="btn-group dropdown-icon-wrapper btn-share">
-                                            <button type="button" class="btn btn-icon hide-arrow btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i data-feather="share-2"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="javascript:void(0)" class="dropdown-item">
-                                                    <i data-feather="facebook"></i>
-                                                </a>
-                                                <a href="javascript:void(0)" class="dropdown-item">
-                                                    <i data-feather="twitter"></i>
-                                                </a>
-                                                <a href="javascript:void(0)" class="dropdown-item">
-                                                    <i data-feather="youtube"></i>
-                                                </a>
-                                                <a href="javascript:void(0)" class="dropdown-item">
-                                                    <i data-feather="instagram"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="d-flex flex-column flex-sm-row pt-1">
                                         <a href="{{route('produk.edit', $product->id)}}" class="btn btn-primary btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0">
                                             <i data-feather="edit" class="mr-50"></i>
@@ -160,6 +140,87 @@
                             </div>
                         </div>
                         <!-- Product Details ends -->
+                    </div>
+
+                    <!-- Transaction Card -->
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="card card-transaction">
+                            <div class="card-header">
+                                <h5 class="">Detail Transaksi</h5>
+                            </div>
+                            <div class="card-body">
+                                {{-- <div class="transaction-item">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <h2>Kuantitas: </h2><input type="text" name="kuantitas" value="" onkeyup="OnChange(this.value)" onKeyPress="return isNumberKey(event)">
+                                        </div>
+                                    </div>
+                                </div> <hr /> --}}
+                                <div class="transaction-item">
+                                    <div class="media">
+                                        <div class="cart-item-qty">
+                                            <div class="input-group">
+                                            <input class="touchspin-cart" type="number" name="kuantitas" value="1" onkeyup="OnChange(this.value)" onKeyPress="return isNumberKey(event)">
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <h2>Total: </h2><input type="text" name="total_harga" value="" disabled="" >
+                                        </div>
+                                    </div>
+                                </div><hr />
+                                <div class="transaction-item">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <a href="/checkout" class="btn btn-primary mr-0 mr-sm-1 mb-1 mb-sm-0">
+                                                <span class="">Buy Now</span>
+                                            </a>
+                                            <a href="javascript:void(0)" class="btn btn-primary btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0">
+                                                <i data-feather="shopping-cart" class="mr-50"></i>
+                                                <span class="add-to-cart">Add to cart</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="transaction-item">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <a href="javascript:void(0)" class="btn btn-outline-secondary btn-wishlist mr-0 mr-sm-1 mb-1 mb-sm-0">
+                                                <i data-feather="heart" class="mr-50"></i>
+                                                <span>Wishlist</span>
+                                            </a>
+                                            <div class="btn-group dropdown-icon-wrapper btn-share">
+                                                <button type="button" class="btn btn-icon hide-arrow btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i data-feather="share-2"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a href="javascript:void(0)" class="dropdown-item">
+                                                        <i data-feather="facebook"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0)" class="dropdown-item">
+                                                        <i data-feather="twitter"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0)" class="dropdown-item">
+                                                        <i data-feather="youtube"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0)" class="dropdown-item">
+                                                        <i data-feather="instagram"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="transaction-item">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/ Transaction Card -->
 
                         <!-- Related Products starts -->
                         {{-- <div class="card-body">
@@ -281,10 +342,10 @@
                             </div>
                         </div> --}}
                         <!-- Related Products ends -->
-                    </div>
                 </section>
                 <!-- app e-commerce details end -->
-
+                </form>
+               
             </div>
     <!-- END: Content-->
     </div>
@@ -329,7 +390,7 @@
                                             closeButton: true,
                                             tapToDismiss: false
                                         });
-                                        window.location = "http://localhost:8181/produk/";
+                                        window.location = "http://localhost:8000/produk/";
                                     }
                                 }
                             });
@@ -339,9 +400,70 @@
 
                     });
             });
+            
+        
+        // $('.kuantitas').keyup(function(){
+        //     sub_total();
+        // });
+                
+        // $('.total_beli').change(function(){
+        //     sub_total();
+        //     });
+        // });
+                
+        // function sub_total(){
+        //     var sum = 0;
+        //     $('.formD').each(function(){
+        //         var jml_brg = $(this).find('input[kuantitas]').val();
+        //         var harga_beli = $(this).find('.input[harga]').val();
+        //         var sub_total = (jml_brg * harga_beli) sum+harga_beli;
+        //         $(this).find('.total_beli').text(''+ total_beli);
+        //     });
+        // });
+        // $('.total_beli').text(sum);
+        
+        
 
-        });
+        // function qty()
+		// {
+		// 	var bayar = document.getElementById('#kuantitas').value;
+		// 	if (bayar == "")
+		// 	{
+		// 		document.getElementById('#hasil_hitung').value ="Error";
+		// 	}
+		// 	else
+		// 	{
+		// 		var hasil_hitung = bayar * 10000;
+		// 		document.getElementById('#hasil_hitung').value = hasil_hitung;
+		// 	}
+		// }
+        
+        // function total() {
+        // var harga_satuan = document.formD.harga.value;
+        // var jumlah = document.formD.kuantitas.value; 
+		// var total_bayar = harga_satuan * jumlah;
 
+		// var jumlah_harga = total_bayar;
+
+		// document.getElementById('total_harga').value = jumlah_harga;
+	    // }
+
+    });
+    
+        hargasatuan = document.formD.harga.value;
+        document.formD.total_harga.value = hargasatuan;
+
+        jumlah = document.formD.kuantitas.value;
+        document.formD.total_harga.value = jumlah;
+        
+        function OnChange(value){
+            hargasatuan = document.formD.harga.value;
+            jumlah = document.formD.kuantitas.value;
+            total = hargasatuan * jumlah;
+            document.formD.total_harga.value = total;
+        }
+    
+    
     </script>
 @endpush
 
