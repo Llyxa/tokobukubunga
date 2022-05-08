@@ -5,7 +5,7 @@
 @endsection
 @section('content')
 <style>
-        /* preview image */
+    /* preview image */
     .column {
         width: 150px;
         min-height: 200px;
@@ -166,17 +166,6 @@
                                             <div class="form-group">
                                                 <label for="genre">Genre</label>
                                                 <div class="demo-inline-spacing">
-                                                    {{-- @foreach ($genre as $item)
-                                                        <div class="custom-control custom-checkbox">
-                                                            @if (old('genre', @$genre ? $item->id : '') == $item->id)
-                                                                <input type="checkbox" class="" id="" name="genre_id" value="{{ $item->id }}" checked>
-                                                                <label class="" for="">{{ $item->genre }}
-                                                            @else
-                                                                <input type="checkbox" class="" id="" name="genre_id" value="{{ $item->id }}">
-                                                                <label class="" for="customCheck1">{{ $item->genre }}</label>
-                                                            @endif
-                                                        </div>
-                                                    @endforeach --}}
                                                     @foreach($genre as $row)
                                                     <div class="custom-control custom-checkbox mt-0">
                                                         <label >

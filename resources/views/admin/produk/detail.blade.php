@@ -111,21 +111,20 @@
                                         <h6>More:</h6>
                                         <ul class="list-unstyled mb-0">
                                             <li>
-                                                <span class="card-text item-company">Penerbit: <a href="javascript:void(0)" class="company-name">{{$product->publisher->penerbit}}</a></span>
+                                                <span class="card-text item-company">Penerbit: <a href="javascript:void(0)" class="company-name">{{@$publisher->penerbit}}</a></span>
                                             </li>
 
                                             <li>
-                                                <span class="card-text item-company">Kategori: <a href="javascript:void(0)" class="company-name">{{$product->category->kategori}}</a></span>
+                                                <span class="card-text item-company">Kategori: <a href="javascript:void(0)" class="company-name">{{@$category->kategori}}</a></span>
                                             </li>
                                             <li>
-                                                <span class="card-text item-company">Genre: <a href="javascript:void(0)" class="company-name">{{$product->genre}}</a></span>
-                                                {{-- <span class="card-text item-company">Genre: 
-                                                    <a a href="javascript:void(0)" class="company-name">
-                                                        @foreach($product->genre_id as $value)
-                                                            {{$value}}
+                                                <span class="card-text item-company">Genre: 
+                                                    <a href="javascript:void(0)" class="company-name">
+                                                        @foreach($product->genres as $genre)
+                                                        <li>{{ $genre->genre }}</li>
                                                         @endforeach
                                                     </a>
-                                                </span> --}}
+                                                </span>
                                             </li>
                                         </ul>
                                     <hr />

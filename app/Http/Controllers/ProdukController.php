@@ -104,14 +104,16 @@ class ProdukController extends Controller
         $data['product'] = Product::find($id);
         $data['publisher'] = Publisher::all();
         $data['category'] = Category::all();
+        // $data['genre'] = Genre::all();
+
         $genre = Genre::all();
-        $genreArray = explode(',', $genre);
+        $genreArray = implode(',', $genre);
         $genres = Genre::select("*")
                         ->whereIn('id', $genreArray)
                         ->get();
     
         // dd($genres);
-        return view('admin.produk.detail', $data, $genre);
+        return view('admin.produk.detail', $data, $genres);
     }
 
     /**

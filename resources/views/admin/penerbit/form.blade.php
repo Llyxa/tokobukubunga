@@ -12,14 +12,12 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Penerbit</h2>
+                        <h2 class="content-header-title float-left mb-0">Tambah Penerbit</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a>
+                                <li class="breadcrumb-item"><a href="{{route('penerbit.index')}}">Penerbit</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Forms</a>
-                                </li>
-                                <li class="breadcrumb-item active"><a href="#">Form Layouts</a>
+                                <li class="breadcrumb-item active">Form Penerbit
                                 </li>
                             </ol>
                         </div>
@@ -42,7 +40,7 @@
                     <div class="col-md-6 col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Vertical Form</h4>
+                                <h4 class="card-title">Form Penerbit</h4>
                             </div>
                             <div class="card-body">
                                 @if ($errors->any())
@@ -66,8 +64,8 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label for="penerbit">penerbit</label>
-                                                <input type="text" id="penerbit" class="form-control" name="penerbit" placeholder="penerbit" value="{{old('nama', @$penerbit ? $penerbit->penerbit : '')}}" />
+                                                <label for="penerbit">Penerbit</label>
+                                                <input type="text" id="penerbit" class="form-control" name="penerbit" placeholder="Penerbit" value="{{old('nama', @$penerbit ? $penerbit->penerbit : '')}}" />
                                             </div>
                                         </div>
                                         <div class="col-12">

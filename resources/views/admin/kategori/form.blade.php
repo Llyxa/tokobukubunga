@@ -14,14 +14,12 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Kategori</h2>
+                        <h2 class="content-header-title float-left mb-0">Tambah Kategori</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a>
+                                <li class="breadcrumb-item"><a href="{route('kategori.index')}}">Kategori</a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Forms</a>
-                                </li>
-                                <li class="breadcrumb-item active"><a href="#">Form Layouts</a>
+                                <li class="breadcrumb-item active">Form Kategori
                                 </li>
                             </ol>
                         </div>
@@ -44,7 +42,7 @@
                     <div class="col-md-6 col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Vertical Form</h4>
+                                <h4 class="card-title">Form Kategori</h4>
                             </div>
                             <div class="card-body">
                                 @if ($errors->any())

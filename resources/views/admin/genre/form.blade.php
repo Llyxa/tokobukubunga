@@ -12,7 +12,7 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Data Genre</h2>
+                        <h2 class="content-header-title float-left mb-0">Tambah Genre</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{route('genre.index')}}">Genre</a>
@@ -65,7 +65,7 @@
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="genre">Genre</label>
-                                                <input type="text" id="genre" class="form-control" name="genre" placeholder="genre" value="{{old('nama', @$genre ? $genre->genre : '')}}" />
+                                                <input type="text" id="genre" class="form-control" name="genre" placeholder="Genre" value="{{old('nama', @$genre ? $genre->genre : '')}}" />
                                             </div>
                                         </div>
                                         <div class="col-12">
