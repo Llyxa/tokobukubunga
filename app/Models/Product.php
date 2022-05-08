@@ -22,7 +22,7 @@ class Product extends Model
     }
 
     public function genre(){
-        return $this->hasMany(Genre::class);
+        return $this->belongsToMany(Genre::class);
     }
     
 }

@@ -75,6 +75,7 @@
     <script src="{{asset('assets')}}/admin/vendors/js/charts/apexcharts.min.js"></script>
     <script src="{{asset('assets')}}/admin/vendors/js/extensions/toastr.min.js"></script>
     <script src="{{asset('assets')}}/admin/vendors/js/extensions/sweetalert2.all.min.js"></script>
+    <script src="{{asset('assets')}}/admin/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
@@ -84,6 +85,7 @@
 
     <!-- BEGIN: Page JS-->
     {{-- <script src="{{asset('assets')}}/admin/js/scripts/pages/dashboard-ecommerce.js"></script> --}}
+    <script src="{{asset('assets')}}/admin/js/scripts/forms/form-repeater.js"></script>
     <!-- END: Page JS-->
 
     <script>

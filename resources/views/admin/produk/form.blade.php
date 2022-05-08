@@ -180,7 +180,8 @@
                                                     @foreach($genre as $row)
                                                     <div class="custom-control custom-checkbox mt-0">
                                                         <label >
-                                                            <input type="checkbox" name="genre_id[]" value="{{$row->id}}">{{$row->genre}}
+                                                            <input type="checkbox" name="genre_id[]" value="{{$row->id}}" >
+                                                            <label class="" for="customCheck1">{{ $row->genre }}</label>
                                                         </label>
                                                     </div>
                                                     @endforeach

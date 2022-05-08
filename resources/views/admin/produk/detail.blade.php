@@ -118,14 +118,14 @@
                                                 <span class="card-text item-company">Kategori: <a href="javascript:void(0)" class="company-name">{{$product->category->kategori}}</a></span>
                                             </li>
                                             <li>
-                                                {{-- <span class="card-text item-company">Genre: <a href="javascript:void(0)" class="company-name">{{@$genre->genre}}</a></span> --}}
-                                                <span class="card-text item-company">Genre: 
+                                                <span class="card-text item-company">Genre: <a href="javascript:void(0)" class="company-name">{{$product->genre}}</a></span>
+                                                {{-- <span class="card-text item-company">Genre: 
                                                     <a a href="javascript:void(0)" class="company-name">
-                                                        @foreach($product as $value)
+                                                        @foreach($product->genre_id as $value)
                                                             {{$value}}
                                                         @endforeach
                                                     </a>
-                                                </span>
+                                                </span> --}}
                                             </li>
                                         </ul>
                                     <hr />

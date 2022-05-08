@@ -37,6 +37,7 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         //Start Validation
         $rules = [
             'kategori' => 'required|unique:categories',

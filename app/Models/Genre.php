@@ -12,7 +12,7 @@ class Genre extends Model
     protected $guarded = ['id'];
 
     public function products(){
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class);
     }
 
 }

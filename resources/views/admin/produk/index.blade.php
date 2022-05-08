@@ -50,12 +50,13 @@
             </div>
             <h6 class="my-2 text-muted">Recently Added</h6>
             <section id="card-content-types">
-                <div class="row row-cols-5">
+                <div class="row row-cols-6">
+                    {{-- {{dd($produk);}} --}}
                     @foreach ($produk as $item)
                     <div class="col">
                         <div class="card h-90">
                             <a href="{{route('produk.show', $item->id)}}" style="padding: 10px;">
-                                <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px;"/>
+                                <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px;"/>
                             </a>
                             <div class="card-body">
                                 <p class="card-title font-weight-bolder mt-0 mb-1">{{$item->judul}}</p>

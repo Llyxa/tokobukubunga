@@ -38,6 +38,7 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         //Start Validation
         $rules = [
             'genre' => 'required|unique:genres',
