@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProdukController;
+use App\Http\Middleware\Admin;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +18,7 @@ use App\Http\Controllers\ProdukController;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Auth::routes();
+Illuminate\Support\Facades\Auth::routes();
 
     // Route::post('/insert', [BukuController::class, 'insert'])->name('insert');
     // Route::get('/tambah', [BukuController::class, 'tambah'])->name('tambah');
@@ -36,12 +35,16 @@ Auth::routes();
     Route::get('/checkout', [ProdukController::class, 'checkout'])->name('checkout');
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
     
-    //Start Produk
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
 
-    //Start Master
-    Route::resource('kategori', \App\Http\Controllers\KategoriController::class);
-    Route::resource('genre', \App\Http\Controllers\GenreController::class);
-    Route::resource('penerbit', \App\Http\Controllers\PenerbitController::class);
+    Route::middleware('admin')->group(function () {
+        Route::resource('kategori', \App\Http\Controllers\KategoriController::class)->except('show');
+        Route::resource('genre', \App\Http\Controllers\GenreController::class)->except('show');
+        Route::resource('penerbit', \App\Http\Controllers\PenerbitController::class)->except('show');
+        // Route::resource('keranjang', \App\Http\Controllers\KeranjangController::class)->except('show');
+    });
+
+
+    

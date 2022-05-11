@@ -17,6 +17,8 @@
                         <h2 class="content-header-title float-left mb-0">Tambah Kategori</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{route('.index')}}">Home</a>
+                                </li>
                                 <li class="breadcrumb-item"><a href="{route('kategori.index')}}">Kategori</a>
                                 </li>
                                 <li class="breadcrumb-item active">Form Kategori

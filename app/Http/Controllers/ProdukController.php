@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Product;
+use Psy\Util\Str;
 use App\Models\Genre;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\Publisher;
-use Psy\Util\Str;
+use App\Models\GenreProduct;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProdukController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -47,7 +54,6 @@ class ProdukController extends Controller
         $request->validate([
             'category_id' => 'required',
             'publisher_id' => 'required',
-            'genre_id' => 'required',
             'judul' => 'required|string',
             'penulis' => 'required|string',
             'sinopsis' => 'required|string',
@@ -57,29 +63,30 @@ class ProdukController extends Controller
             'image.*' => 'image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        // $genres = [];
-        // foreach($request->genre_id as $genre){
-        //     $genres[] = [
-        //         'genre_id' => $genre
-        //     ];
-        // }
-
         $genres = implode(', ' , $request->genre_id);
-
         $imageName = time() . '.' . $request->image->extension();
         $request->image->move(public_path() . '/storage/foto/', $imageName);
 
-        $produk = new Product();
-        $produk->category_id =$request->category_id;
-        $produk->publisher_id =$request->publisher_id;
-        $produk->genre_id = $genres;
-        $produk->image = $imageName;
-        $produk->judul =$request->judul;
-        $produk->penulis =$request->penulis;
-        $produk->sinopsis =$request->sinopsis;
-        $produk->harga =$request->harga;
-        $produk->stok = $request->stok;
-        $produk->save();
+        $produk = Product::create([
+            'category_id' => $request['category_id'],
+            'publisher_id' => $request['publisher_id'],
+            'genre_id' => $genres,
+            'judul' => $request['judul'],
+            'penulis' => $request['penulis'],
+            'sinopsis' => $request['sinopsis'],
+            'harga' => $request['harga'],
+            'stok' => $request['stok'],
+            'image' => $imageName
+        ]);
+
+        $genress = $request->genre_id;
+        foreach($genress as $genre){
+           GenreProduct::create ([
+                'product_id' => $produk->id,
+                'genre_id' => $genre
+            ]);
+        }
+
         
 
         // Product::create($produk);
@@ -101,19 +108,18 @@ class ProdukController extends Controller
      */
     public function show($id)
     {
+        
         $data['product'] = Product::find($id);
         $data['publisher'] = Publisher::all();
         $data['category'] = Category::all();
         // $data['genre'] = Genre::all();
+        $data['genre'] = DB::table('genres')->where('genre')->get();
+        // $genreArray = explode(',', $genre);
+        // Genre::select("*")->whereIn('id', $genreArray)->get();
+        // $genre = Genre::all();
+        // Genre::where('id', 'genre')->get();
 
-        $genre = Genre::all();
-        $genreArray = implode(',', $genre);
-        $genres = Genre::select("*")
-                        ->whereIn('id', $genreArray)
-                        ->get();
-    
-        // dd($genres);
-        return view('admin.produk.detail', $data, $genres);
+        return view('admin.produk.detail', $data);
     }
 
     /**

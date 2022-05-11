@@ -40,49 +40,14 @@
             <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Admin</span><i data-feather="more-horizontal"></i>
             <li class="@yield('listbuku')"><a class="d-flex align-items-center" href="{{route('produk.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">List Buku</span></a>
             </li>
+            @can('admin')
             <li class="@yield('kategori')"><a class="d-flex align-items-center" href="{{route('kategori.index')}}"><i data-feather="grid"></i><span class="menu-title text-truncate" data-i18n="Kanban">Kategori</span></a>
             </li>
             <li class="@yield('genre')"><a class="d-flex align-items-center" href="{{route('genre.index')}}"><i data-feather='dribbble'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Genre</span></a>
             </li>
             <li class="@yield('penerbit')"><a class="d-flex align-items-center" href="{{route('penerbit.index')}}"><i data-feather='feather'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Penerbit</span></a>
             </li>
-
-            {{-- User --}}
-            {{-- <li><a class="d-flex align-items-center" href="{{url('/home')}}"><i data-feather="home"></i><span class="menu-item text-truncate" data-i18n="Analytics">Home</span></a>
-            </li>
-            <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">User</span><i data-feather="more-horizontal"></i>
-            <li class="@yield('listbuku')"><a class="d-flex align-items-center" href="{{route('user.produk.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">List Buku</span></a>
-            </li>
-            <li class="@yield('kategori')"><a class="d-flex align-items-center" href="{{route('user.kategori.index')}}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Kategori</span></a>
-                <ul class="menu-content">
-                    <li><a class="d-flex align-items-center" href="app-invoice-edit.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Edit">Novel</span></a>
-                    </li>
-                    <li><a class="d-flex align-items-center" href="app-invoice-add.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Add">Komik</span></a>
-                    </li>
-                    <li><a class="d-flex align-items-center" href="app-invoice-add.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Add">Lainnya</span></a>
-                    </li>
-                </ul>
-            </li>
-            <li class="@yield('genre')"><a class="d-flex align-items-center" href="{{route('user.genre.index')}}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Genre</span></a>
-                <ul class="menu-content">
-                    <li><a class="d-flex align-items-center" href="app-invoice-edit.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Edit">Fiksi</span></a>
-                    </li>
-                    <li><a class="d-flex align-items-center" href="app-invoice-add.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Add">Fantasi</span></a>
-                    </li>
-                    <li><a class="d-flex align-items-center" href="app-invoice-add.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Add">Lainnya</span></a>
-                    </li>
-                </ul>
-            </li>
-            <li class="@yield('penerbit')"><a class="d-flex align-items-center" href="{{route('user.penerbit.index')}}"><i data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Penerbit</span></a>
-                <ul class="menu-content">
-                    <li><a class="d-flex align-items-center" href="app-invoice-edit.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Edit">Gramedia Pustaka Utama</span></a>
-                    </li>
-                    <li><a class="d-flex align-items-center" href="app-invoice-add.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Add">DAR! Mizan</span></a>
-                    </li>
-                    <li><a class="d-flex align-items-center" href="app-invoice-add.html"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Add">Lainnya</span></a>
-                    </li>
-                </ul>
-            </li> --}}
+            @endcan
         </ul>
     </div>
 </div>

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('genre_product', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id')->unsigned();
-            $table->integer('genre_id')->unsigned();
+            $table->foreignId('product_id');
+            $table->foreignId('genre_id');
             $table->timestamps();
         });
     }
