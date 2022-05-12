@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->foreignId('category_id');
             $table->foreignId('publisher_id');
             // $table->string('genre_id');
@@ -25,6 +24,8 @@ return new class extends Migration
             $table->integer('harga');
             $table->string('stok');
             $table->string('image');
+            $table->string('status')->default('1');
+            $table->timestamps();
         });
     }
 

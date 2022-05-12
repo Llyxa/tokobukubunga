@@ -200,9 +200,8 @@ class ProdukController extends Controller
         }
     }
 
-    public function checkout(){
-        $data['product'] = Product::all();
-        return view('admin.checkout.index', $data);
+    public function checkout(Request $request, $id){
+        dd('hai');
     }
 
 

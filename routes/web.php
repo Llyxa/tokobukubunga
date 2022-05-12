@@ -32,18 +32,19 @@ Illuminate\Support\Facades\Auth::routes();
     // Route::get('/category/{category:kategori}', [BukuController::class, 'category'])->name('category');
     Route::get('/genres', [BukuController::class, 'genres'])->name('genres');
     // Route::get('/genre/{genre:genre}', [BukuController::class, 'genre'])->name('genre');
-    Route::get('/checkout', [ProdukController::class, 'checkout'])->name('checkout');
+    // Route::get('/checkout/{id}', [ProdukController::class, 'checkout'])->name('checkout');
+    // Route::get('/checkout', 'ProdukController@checkout');
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
     
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
+    Route::resource('keranjang', \App\Http\Controllers\KeranjangController::class);
 
     Route::middleware('admin')->group(function () {
         Route::resource('kategori', \App\Http\Controllers\KategoriController::class)->except('show');
         Route::resource('genre', \App\Http\Controllers\GenreController::class)->except('show');
         Route::resource('penerbit', \App\Http\Controllers\PenerbitController::class)->except('show');
-        // Route::resource('keranjang', \App\Http\Controllers\KeranjangController::class)->except('show');
     });
 
 

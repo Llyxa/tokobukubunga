@@ -23,12 +23,12 @@
             <div class="content-header-left col-md-9 col-12 mb-2">
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
-                        <h2 class="content-header-title float-left mb-0">Data produk</h2>
+                        <h2 class="content-header-title float-left mb-0">List Buku</h2>
                         <div class="breadcrumb-wrapper">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Home</a>
-                                </li>
-                                <li class="breadcrumb-item active">Data produk
+                                {{-- <li class="breadcrumb-item"><a href="index.html">Home</a>
+                                </li> --}}
+                                <li class="breadcrumb-item active">List Buku
                                 </li>
                             </ol>
                         </div>
@@ -45,9 +45,11 @@
             </div>
         </div>
         <div class="content-body">
+            @can('admin')
             <div class="header">
                 <a href="{{route('produk.create')}}" class="btn btn-primary waves-effect waves-float waves-light">Tambah produk</a>
             </div>
+            @endcan
             <h6 class="my-2 text-muted">Recently Added</h6>
             <section id="card-content-types">
                 <div class="row row-cols-6">

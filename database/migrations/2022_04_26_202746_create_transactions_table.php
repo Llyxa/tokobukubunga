@@ -15,7 +15,11 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('alamat');
+            $table->foreignId('user_id');
+            $table->foreignId('payment_option_id');
+            $table->foreignId('delivery_id');
+            $table->string('total_bayar'); //jumlah dari semua harga_total
+            $table->date('tgl_transaksi');
             $table->timestamps();
         });
     }

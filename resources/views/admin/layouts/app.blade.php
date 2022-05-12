@@ -18,6 +18,8 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/vendors/css/extensions/toastr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/vendors/css/forms/wizard/bs-stepper.min.css">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -34,6 +36,10 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/css/pages/dashboard-ecommerce.css">
     <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/css/plugins/charts/chart-apex.css">
     <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/css/plugins/extensions/ext-component-toastr.css">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/css/pages/app-ecommerce.css">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/css/plugins/forms/pickers/form-pickadate.css">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/css/plugins/forms/form-wizard.css">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets')}}/admin/css/plugins/forms/form-number-input.css">
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
@@ -76,6 +82,8 @@
     <script src="{{asset('assets')}}/admin/vendors/js/extensions/toastr.min.js"></script>
     <script src="{{asset('assets')}}/admin/vendors/js/extensions/sweetalert2.all.min.js"></script>
     <script src="{{asset('assets')}}/admin/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="{{asset('assets')}}/admin/vendors/js/forms/wizard/bs-stepper.min.js"></script>
+    <script src="{{asset('assets')}}/admin/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
@@ -86,6 +94,7 @@
     <!-- BEGIN: Page JS-->
     {{-- <script src="{{asset('assets')}}/admin/js/scripts/pages/dashboard-ecommerce.js"></script> --}}
     <script src="{{asset('assets')}}/admin/js/scripts/forms/form-repeater.js"></script>
+    <script src="{{asset('assets')}}/admin/js/scripts/pages/app-ecommerce-checkout.js"></script>
     <!-- END: Page JS-->
 
     <script>
