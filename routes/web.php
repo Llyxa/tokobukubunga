@@ -33,13 +33,14 @@ Illuminate\Support\Facades\Auth::routes();
     Route::get('/genres', [BukuController::class, 'genres'])->name('genres');
     // Route::get('/genre/{genre:genre}', [BukuController::class, 'genre'])->name('genre');
     // Route::get('/checkout/{id}', [ProdukController::class, 'checkout'])->name('checkout');
-    // Route::get('/checkout', 'ProdukController@checkout');
+    // Route::get('/keranjang', 'ProdukController@checkout');
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
     
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
-    Route::resource('keranjang', \App\Http\Controllers\KeranjangController::class);
+    Route::resource('detail-transaksi', \App\Http\Controllers\DetailTransaksiController::class);
+    Route::resource('transaksi', \App\Http\Controllers\TransaksiController::class);
 
     Route::middleware('admin')->group(function () {
         Route::resource('kategori', \App\Http\Controllers\KategoriController::class)->except('show');

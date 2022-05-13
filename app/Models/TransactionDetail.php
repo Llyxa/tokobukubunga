@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionDetail extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
+
+    public function transaction(){
+        return $this->belongsTo(Transaction::class);
+    }
 }

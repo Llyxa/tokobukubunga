@@ -200,9 +200,9 @@ class ProdukController extends Controller
         }
     }
 
-    public function checkout(Request $request, $id){
-        dd('hai');
-    }
+    // public function checkout(Request $request, $id){
+    //     dd('hai');
+    // }
 
 
 

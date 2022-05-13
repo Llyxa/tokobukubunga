@@ -25,7 +25,11 @@ class Product extends Model
         return $this->belongsToMany(Genre::class, 'genre_product');
     }
     
-    public function cart(){
-        return $this->belongsTo(Cart::class);
+    public function transaction(){
+        return $this->belongsTo(Transaction::class);
     }
+
+    // public function cart(){
+    //     return $this->belongsTo(Cart::class);
+    // }
 }
