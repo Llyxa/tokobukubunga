@@ -41,10 +41,10 @@
                 </button>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('categories') }}">{{ __('Kategori') }}</a>
+                        {{-- <a class="nav-link" href="{{ route('categories') }}">{{ __('Kategori') }}</a> --}}
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('genres') }}">{{ __('Genre') }}</a>
+                        {{-- <a class="nav-link" href="{{ route('genres') }}">{{ __('Genre') }}</a> --}}
                     </li>
                 </ul>
 

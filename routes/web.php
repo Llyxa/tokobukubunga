@@ -28,9 +28,9 @@ Illuminate\Support\Facades\Auth::routes();
  
     // Route::get('/home', [BukuController::class, 'home'])->name('home');
     // Route::get('/detail/{id}', [BukuController::class, 'detail'])->name('detail')->name('detail');
-    Route::get('/categories', [BukuController::class, 'categories'])->name('categories');
+    // Route::get('/categories', [BukuController::class, 'categories'])->name('categories');
     // Route::get('/category/{category:kategori}', [BukuController::class, 'category'])->name('category');
-    Route::get('/genres', [BukuController::class, 'genres'])->name('genres');
+    // Route::get('/genres', [BukuController::class, 'genres'])->name('genres');
     // Route::get('/genre/{genre:genre}', [BukuController::class, 'genre'])->name('genre');
     // Route::get('/checkout/{id}', [ProdukController::class, 'checkout'])->name('checkout');
     // Route::get('/keranjang', 'ProdukController@checkout');
@@ -39,13 +39,16 @@ Illuminate\Support\Facades\Auth::routes();
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
     
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
-    Route::resource('detail-transaksi', \App\Http\Controllers\DetailTransaksiController::class);
+    // Route::resource('detail-transaksi', \App\Http\Controllers\DetailTransaksiController::class);
     Route::resource('transaksi', \App\Http\Controllers\TransaksiController::class);
+    Route::resource('keranjang', \App\Http\Controllers\KeranjangController::class);
 
     Route::middleware('admin')->group(function () {
         Route::resource('kategori', \App\Http\Controllers\KategoriController::class)->except('show');
         Route::resource('genre', \App\Http\Controllers\GenreController::class)->except('show');
         Route::resource('penerbit', \App\Http\Controllers\PenerbitController::class)->except('show');
+        Route::resource('cara_bayar', \App\Http\Controllers\CaraBayarController::class)->except('show');
+        Route::resource('pengiriman', \App\Http\Controllers\PengirimanController::class)->except('show');
     });
 
 

@@ -13,4 +13,13 @@ class Transaction extends Model
     public function product(){
         return $this->belongsTo(Product::class);
     }
+
+    public function delivery(){
+        return $this->belongsTo(Delivery::class);
+    }
+
+    public function paymentOption(){
+        return $this->belongsTo(PaymentOption::class);
+    }
+
 }

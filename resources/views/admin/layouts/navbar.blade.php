@@ -6,7 +6,7 @@
             </ul>
             <ul class="nav navbar-nav bookmark-icons">
                 <li class="nav-item d-none d-lg-block"><a href="{{route('produk.index')}}" class="nav-link" data-toggle="tooltip" data-placement="top" title="Produk"><i class="ficon" data-feather="bookmark"></i></a></li> {{-- Produk --}}
-                <li class="nav-item d-none d-lg-block"><a href="{{route('kategori.index')}}" class="nav-link" data-toggle="tooltip" data-placement="top" title="Kategori"><i class="ficon" data-feather="grid"></i></a></li> {{-- Kategori --}}
+                <li class="nav-item d-none d-lg-block"><a href="{{route('kategori.index')}}" class="nav-link" data-toggle="tooltip" data-placement="top" title="Kategori"><i class="ficon" data-feather="grid"></i></a></li> Kategori
                 <li class="nav-item d-none d-lg-block"><a href="{{route('genre.index')}}" class="nav-link" data-toggle="tooltip" data-placement="top" title="Genre"><i class="ficon" data-feather="dribbble"></i></a></li> {{-- Genre --}}
                 <li class="nav-item d-none d-lg-block"><a href="{{route('penerbit.index')}}" href="nav-link" data-toggle="tooltip" data-placement="top" title="Penerbit"><i class="ficon" data-feather="feather"></i></a></li> {{-- Penerbit --}}
             </ul>

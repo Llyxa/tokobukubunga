@@ -128,7 +128,7 @@
                                         <div class="media">
                                             <div class="item-quantity">
                                                 <span class="quantity-title">Kuantitas:</span>
-                                                <form action="{{route('detail-transaksi.store')}}" method="POST">
+                                                <form action="{{route('keranjang.store')}}" method="POST">
                                                     @csrf
                                                     <div class="input-group quantity-counter-wrapper">
                                                         <input type="text" class="quantity-counter" value="1" name="" />

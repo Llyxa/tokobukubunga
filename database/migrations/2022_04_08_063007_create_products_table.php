@@ -24,7 +24,6 @@ return new class extends Migration
             $table->integer('harga');
             $table->string('stok');
             $table->string('image');
-            $table->string('status')->default('1');
             $table->timestamps();
         });
     }

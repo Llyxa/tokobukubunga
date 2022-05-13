@@ -18,6 +18,11 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('payment_option_id');
             $table->foreignId('delivery_id');
+            $table->foreignId('cart_id');
+            $table->string('alamat');
+            $table->integer('qty_total'); //jumlah dari semua qty
+            $table->integer('ongkir');
+            $table->integer('diskon');
             $table->string('total_bayar'); //jumlah dari semua harga_total
             $table->date('tgl_transaksi');
             $table->timestamps();

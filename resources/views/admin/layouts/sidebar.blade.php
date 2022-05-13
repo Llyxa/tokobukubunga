@@ -40,12 +40,18 @@
             <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Produk</span><i data-feather="more-horizontal"></i>
             <li class="@yield('listbuku')"><a class="d-flex align-items-center" href="{{route('produk.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">List Buku</span></a>
             </li>
+            <li class="@yield('keranjang')"><a class="d-flex align-items-center" href="{{route('keranjang.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Keranjang</span></a>
+            </li>
             @can('admin')
             <li class="@yield('kategori')"><a class="d-flex align-items-center" href="{{route('kategori.index')}}"><i data-feather="grid"></i><span class="menu-title text-truncate" data-i18n="Kanban">Kategori</span></a>
             </li>
             <li class="@yield('genre')"><a class="d-flex align-items-center" href="{{route('genre.index')}}"><i data-feather='dribbble'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Genre</span></a>
             </li>
             <li class="@yield('penerbit')"><a class="d-flex align-items-center" href="{{route('penerbit.index')}}"><i data-feather='feather'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Penerbit</span></a>
+            </li>
+            <li class="@yield('cara_bayar')"><a class="d-flex align-items-center" href="{{route('cara_bayar.index')}}"><i data-feather='feather'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Cara Bayar</span></a>
+            </li>
+            <li class="@yield('pengiriman')"><a class="d-flex align-items-center" href="{{route('pengiriman.index')}}"><i data-feather='feather'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Pengiriman</span></a>
             </li>
             @endcan
         </ul>
