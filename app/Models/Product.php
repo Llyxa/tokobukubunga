@@ -29,9 +29,9 @@ class Product extends Model
         return $this->belongsToMany(Genre::class, 'genre_product');
     }
     
-    public function transaction(){
-        return $this->belongsToMany(Transaction::class);
-    }
+    // public function transaction(){
+    //     return $this->belongsToMany(Transaction::class);
+    // }
 
     // public function delivery(){
     //     return $this->belongsTo(Delivery::class);
@@ -41,7 +41,7 @@ class Product extends Model
     //     return $this->belongsTo(PaymentOption::class);
     // }
 
-    // public function cart(){
-    //     return $this->belongsToMany(Cart::class);
-    // }
+    public function cart(){
+        return $this->hasOne(Cart::class);
+    }
 }

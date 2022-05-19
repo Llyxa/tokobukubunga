@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('product_id');
-            $table->string('status'); //sudah di checkout atau belum
-            $table->integer('qty');
-            $table->integer('subtotal'); //qty dikali harga tiap produk
+            $table->foreignId('produt_id');
+            $table->integer('qty')->default(0);
+            // $table->double('harga')->default(0); harga dari tabel products
+            $table->double('subtotal')->default(0);
             $table->timestamps();
         });
     }

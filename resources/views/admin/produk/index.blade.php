@@ -68,7 +68,13 @@
                                 <a href="{{route('produk.edit', $item->id)}}" class="card-link">Edit</a>
                                 <a href="#" data-id="{{$item->id}}" class="card-link">Delete</a>
                             </div> --}}
+                            
                         </div>
+                        <button class="btn btn-block btn-primary btn-add-to-cart" data-id="{{$item->id}}">
+                            <i class="fa fa-shopping-cart"></i> Tambahkan Ke Keranjang
+                        </button>
+
+                        {{-- <a href="{{route('cart.index')}}" class="btn btn-primary waves-effect waves-float waves-light">Cart</a> --}}
                     </div>
                     @endforeach                    
                 </div>
@@ -84,6 +90,41 @@
 @push('scripts')
     <script>
         $(document).ready(function () {
+            $(document).ready(function () {
+            $('.btn-add-to-cart').click(function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: "{{route('cart.create')}}",
+                    type: "POST",
+                    data: {
+                        id_produk: id,
+                        _token: '{{csrf_token()}}'
+                    },
+                    success: function (data) {
+                        $('#cart-count').html(data.data.cart_item_count);
+                        $('#cart-count-label').html(data.data.cart_item_count+" Items");
+                        $('#cart-total').html(data.data.cart_total);
+                        $('#cart-items').html(data.data.cart_items);
+                        toastr.success('Keranjang berhasil diperbarui', 'Berhasil!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                        if (feather) {
+                            feather.replace({
+                                width: 14,
+                                height: 14
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        toastr.error('Keranjang gagal diperbarui', 'Gagal!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                    }
+                });
+            });
+
             $(document).on('click', '.btn-del', function () {
                 var id = $(this).data('id');
                 Swal.fire({

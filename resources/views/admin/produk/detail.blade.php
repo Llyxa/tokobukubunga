@@ -104,12 +104,14 @@
                                             <a href="#" data-id="{{$product->id}}" class="btn btn-danger btn-del waves-effect waves-float waves-light">Delete</a>
                                         </div>
                                         @endcan
+                                        
                                     </div>
                                 </div>
                             </div>
                             <!-- Product Details ends -->
                         </div>
                     
+                        {{-- @can('user') --}}
                         <!-- Transaction Card -->
                         <div class="card col-lg-4">
                             <div class="card card-transaction">
@@ -127,14 +129,23 @@
                                     <div class="transaction-item">
                                         <div class="media">
                                             <div class="item-quantity">
-                                                <span class="quantity-title">Kuantitas:</span>
-                                                <form action="{{route('keranjang.store')}}" method="POST">
+                                                
+                                                <form action="{{ route('cartdetail.store') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value={{$product->id}}>
+                                                    <button class="btn btn-block btn-primary" type="submit">
+                                                    <i class="fa fa-shopping-cart"></i> Tambahkan Ke Keranjang
+                                                    </button>
+                                                  </form>
+                                                  
+                                                {{-- <span class="quantity-title">Kuantitas:</span> --}}
+                                                {{-- <form action="{{route('keranjang.store')}}" method="POST">
                                                     @csrf
                                                     <div class="input-group quantity-counter-wrapper">
                                                         <input type="text" class="quantity-counter" value="1" name="" />
                                                     </div>
                                                     <button type="submit" class="btn btn-primary"><i data-feather="shopping-cart" class="mr-50"></i>Add To Cart</button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </div>
                                     </div><hr />
@@ -197,7 +208,8 @@
                             </div>
                         </div>
                         <!--/ Transaction Card -->
-    
+                        {{-- @endcan --}}
+
                         <!-- Related Products starts -->
                             {{-- <div class="card-body">
                                 <div class="mt-4 mb-2 text-center">

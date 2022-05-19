@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('judul');
             $table->string('penulis');
             $table->mediumText('sinopsis');
-            $table->integer('harga');
+            $table->double('harga');
             $table->string('stok');
             $table->string('image');
             $table->timestamps();

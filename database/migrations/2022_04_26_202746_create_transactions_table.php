@@ -15,16 +15,18 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('payment_option_id');
-            $table->foreignId('delivery_id');
-            $table->foreignId('cart_id');
+            $table->foreignId('users_id');
+            // $table->foreignId('payment_option_id');
+            // $table->foreignId('delivery_id');
+            // $table->foreignId('cart_id');
             $table->string('alamat');
-            $table->integer('qty_total'); //jumlah dari semua qty
-            $table->integer('ongkir');
-            $table->integer('diskon');
-            $table->string('total_bayar'); //jumlah dari semua harga_total
+            $table->integer('qty_total'); //jumlah produk yang dibeli
+            $table->double('ongkir');
+            $table->double('diskon');
+            $table->double('total'); //jumlah dari subtotal + ongkir - diskon
             $table->date('tgl_transaksi');
+            $table->string('status_pembayaran');// ada 2 sudah dan belum
+            $table->string('status_pengiriman');// ada 2 yaitu belum dan sudah
             $table->timestamps();
         });
     }

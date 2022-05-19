@@ -5,7 +5,7 @@
 
 @section('content')
     <!-- BEGIN: Content-->
-    <div class="app-content content ecommerce-application">
+    {{-- <div class="app-content content ecommerce-application">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
@@ -13,7 +13,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">Keranjang</h2>
+                            <h2 class="content-header-title float-left mb-0">Checkout</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="index.html">Home</a>
@@ -623,13 +623,46 @@
                             </form>
                         </div>
                         <!-- Checkout Payment Ends -->
+                        <!-- </div> -->
                     </div>
                 </div>
 
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- END: Content-->
+
+    @foreach(session()->get('cart_items', []) as $cart_item)
+    <div class="col-12 col-md-12 mb-3">
+        <div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">
+            <img class="d-block rounded mr-1" src="{{ asset('storage/foto/'.$cart_item['produk']->image) }}" style="max-height: 60px; min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >
+        </div>
+    
+            <div class="media-body">
+                <i class="ficon cart-item-remove" data-feather="x" data-id="{{$cart_item['produk']->id}}"></i>
+                <div class="media-heading">
+                    <h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">
+                        {{$cart_item['produk']->judul}}</a>
+                </div>
+                <div class="btn-group" role="group">
+                    <input type="hidden" name="param" value="kurang">
+                    <button class="btn btn-primary btn-sm btn-decrease" data-id="{{$cart_item['produk']->id}}" data-qty="{{$cart_item['qty']}}" {{$cart_item['qty']<=1?'disabled':''}}>
+                    -
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" disabled="true">
+                    {{ number_format($cart_item['qty']) }}
+                    </button>
+                    <input type="hidden" name="param" value="tambah">
+                    <button class="btn btn-primary btn-sm btn-increase" data-id="{{$cart_item['produk']->id}}" data-qty="{{$cart_item['qty']}}">
+                    +
+                    </button>
+                    </div>
+                <h5 class="cart-item-price">Rp{{ number_format($cart_item['produk']->harga * $cart_item['qty']) }}</h5>
+            </div>
+        </div>
+    </div>
+    @endforeach
+    
 @endsection
 
 @push('styles')
@@ -638,6 +671,112 @@
 @push('scripts')
     <script>
         $(document).ready(function () {
+            $('#cart-items').on('click', '.btn-decrease', function () {
+                var id = $(this).data('id');
+                var qty = parseInt($(this).data('qty'))-1;
+                $.ajax({
+                    url: "{{url('cart')}}/"+id,
+                    type: "POST",
+                    data: {
+                        qty: qty,
+                        _token: '{{csrf_token()}}',
+                        _method: 'PUT'
+                    },
+                    success: function (data) {
+                        $('#cart-count').html(data.data.cart_item_count);
+                        $('#cart-count-label').html(data.data.cart_item_count+" Items");
+                        $('#cart-total').html(data.data.cart_total);
+                        $('#cart-items').html(data.data.cart_items);
+                        toastr.success('Keranjang berhasil diperbarui', 'Berhasil!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                        if (feather) {
+                            feather.replace({
+                                width: 14,
+                                height: 14
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        toastr.error('Keranjang gagal diperbarui', 'Gagal!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                    }
+                });
+            });
+
+            $('#cart-items').on('click', '.btn-increase', function () {
+                var id = $(this).data('id');
+                var qty = parseInt($(this).data('qty'))+1;
+                $.ajax({
+                    url: "{{url('cart')}}/"+id,
+                    type: "POST",
+                    data: {
+                        qty: qty,
+                        _token: '{{csrf_token()}}',
+                        _method: 'PUT'
+                    },
+                    success: function (data) {
+                        $('#cart-count').html(data.data.cart_item_count);
+                        $('#cart-count-label').html(data.data.cart_item_count+" Items");
+                        $('#cart-total').html(data.data.cart_total);
+                        $('#cart-items').html(data.data.cart_items);
+                        toastr.success('Keranjang berhasil diperbarui', 'Berhasil!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                        if (feather) {
+                            feather.replace({
+                                width: 14,
+                                height: 14
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        toastr.error('Keranjang gagal diperbarui', 'Gagal!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                    }
+                });
+            });
+
+            $('#cart-items').on('click', '.cart-item-remove', function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: "{{url('cart')}}/"+id,
+                    type: "POST",
+                    data: {
+                        _token: '{{csrf_token()}}',
+                        _method: 'DELETE'
+                    },
+                    success: function (data) {
+                        $('#cart-count').html(data.data.cart_item_count);
+                        $('#cart-count-label').html(data.data.cart_item_count+" Items");
+                        $('#cart-total').html(data.data.cart_total);
+                        $('#cart-items').html(data.data.cart_items);
+                        if (feather) {
+                            feather.replace({
+                                width: 14,
+                                height: 14
+                            });
+                        }
+                        toastr.success('Data berhasil dihapus!', 'Berhasil!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                    },
+                    error: function (data) {
+                        toastr.error('Terjadi kesalahan!', 'Gagal!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                    }
+                });
+            });
+
             $(document).on('click', '.btn-del', function () {
                 var id = $(this).data('id');
                 Swal.fire({
@@ -653,7 +792,7 @@
                     .then((result) => {
                         if (result.value) {
                             $.ajax({
-                                'url': '{{url('produk')}}/' + id,
+                                'url': '{{url('cart')}}/' + id,
                                 'type': 'post',
                                 'data': {
                                     '_method': 'DELETE',

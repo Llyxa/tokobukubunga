@@ -40,8 +40,10 @@
             <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Produk</span><i data-feather="more-horizontal"></i>
             <li class="@yield('listbuku')"><a class="d-flex align-items-center" href="{{route('produk.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">List Buku</span></a>
             </li>
-            <li class="@yield('keranjang')"><a class="d-flex align-items-center" href="{{route('keranjang.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Keranjang</span></a>
+            {{-- @can('user') --}}
+            <li class="@yield('keranjang')"><a class="d-flex align-items-center" href="{{route('cart.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Keranjang</span></a>
             </li>
+            {{-- @endcan --}}
             @can('admin')
             <li class="@yield('kategori')"><a class="d-flex align-items-center" href="{{route('kategori.index')}}"><i data-feather="grid"></i><span class="menu-title text-truncate" data-i18n="Kanban">Kategori</span></a>
             </li>

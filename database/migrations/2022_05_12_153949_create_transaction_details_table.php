@@ -17,8 +17,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transaction_id');
             $table->foreignId('product_id');
-            $table->integer('qty');
-            $table->integer('harga_total'); //harga produk dikali kuantitas
+            $table->integer('qty'); //qty tiap produk 
+            $table->integer('total'); //harga tiap produk dikali qty
+            $table->string('no_resi')->nullable();
+            $table->string('ekspedisi')->nullable();
+            $table->double('ongkir', 12, 2)->default(0);
+            $table->double('diskon', 12, 2)->default(0);
+            // $table->double('total', 12, 2)->default(0);
             $table->timestamps();
         });
     }

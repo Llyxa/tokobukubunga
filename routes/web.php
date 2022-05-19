@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\Admin;
+// use App\Http\Controllers\CartController;
+// use App\Http\Controllers\CartDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,28 +22,14 @@ Route::get('/', function () {
 });
 Illuminate\Support\Facades\Auth::routes();
 
-    // Route::post('/insert', [BukuController::class, 'insert'])->name('insert');
-    // Route::get('/tambah', [BukuController::class, 'tambah'])->name('tambah');
-    // Route::get('/tampilkandata/{id}', [BukuController::class, 'tampilkandata'])->name('tampilkandata');
-    // Route::post('/updatedata/{id}', [BukuController::class, 'updatedata'])->name('updatedata');
-    // Route::get('/delete/{id}', [\App\Http\Controllers\ProdukController::class, 'delete'])->name('delete');
- 
-    // Route::get('/home', [BukuController::class, 'home'])->name('home');
-    // Route::get('/detail/{id}', [BukuController::class, 'detail'])->name('detail')->name('detail');
-    // Route::get('/categories', [BukuController::class, 'categories'])->name('categories');
-    // Route::get('/category/{category:kategori}', [BukuController::class, 'category'])->name('category');
-    // Route::get('/genres', [BukuController::class, 'genres'])->name('genres');
-    // Route::get('/genre/{genre:genre}', [BukuController::class, 'genre'])->name('genre');
     // Route::get('/checkout/{id}', [ProdukController::class, 'checkout'])->name('checkout');
     // Route::get('/keranjang', 'ProdukController@checkout');
+    // Route::resource('detail-transaksi', \App\Http\Controllers\DetailTransaksiController::class);
+    Route::resource('cart', \App\Http\Controllers\CartController::class);
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
-    
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
-    // Route::resource('detail-transaksi', \App\Http\Controllers\DetailTransaksiController::class);
-    Route::resource('transaksi', \App\Http\Controllers\TransaksiController::class);
-    Route::resource('keranjang', \App\Http\Controllers\KeranjangController::class);
 
     Route::middleware('admin')->group(function () {
         Route::resource('kategori', \App\Http\Controllers\KategoriController::class)->except('show');
@@ -51,5 +39,21 @@ Illuminate\Support\Facades\Auth::routes();
         Route::resource('pengiriman', \App\Http\Controllers\PengirimanController::class)->except('show');
     });
 
+    // Route::middleware('user')->group(function () {
+    //     Route::resource('transaksi', \App\Http\Controllers\TransaksiController::class);
+    //     // cart
+    //     Route::resource('cart', \App\Http\Controllers\CartController::class);
+    //     Route::patch('kosongkan/{id}', [App\Http\Controllers\CartController::class, 'kosongkan']);
+    //     // cart detail
+    //     Route::resource('cartdetail', \App\Http\Controllers\CartDetailController::class);
+    // });
+
+// Route::group(['middleware' => 'auth'], function() {
+    // cart
+    // Route::resource('cart', \App\Http\Controllers\CartController::class);
+    Route::patch('kosongkan/{id}', [App\Http\Controllers\CartController::class, 'kosongkan']);
+    // cart detail
+    Route::resource('cartdetail', \App\Http\Controllers\CartDetailController::class);
+//   });
 
     

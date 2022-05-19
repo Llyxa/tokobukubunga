@@ -87,10 +87,6 @@ class ProdukController extends Controller
             ]);
         }
 
-        
-
-        // Product::create($produk);
-
         if ($produk){
             return redirect()->route('produk.index')->with('success', 'Data berhasil ditambahkan');
         } else {
@@ -112,12 +108,7 @@ class ProdukController extends Controller
         $data['product'] = Product::find($id);
         $data['publisher'] = Publisher::all();
         $data['category'] = Category::all();
-        // $data['genre'] = Genre::all();
         $data['genre'] = DB::table('genres')->where('genre')->get();
-        // $genreArray = explode(',', $genre);
-        // Genre::select("*")->whereIn('id', $genreArray)->get();
-        // $genre = Genre::all();
-        // Genre::where('id', 'genre')->get();
 
         return view('admin.produk.detail', $data);
     }
@@ -199,12 +190,5 @@ class ProdukController extends Controller
             return redirect()->route('produk.detail')->with('error','Data gagal dihapus');
         }
     }
-
-    // public function checkout(Request $request, $id){
-    //     dd('hai');
-    // }
-
-
-
 }
 
