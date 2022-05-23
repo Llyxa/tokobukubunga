@@ -3,7 +3,6 @@
 @section('title','Data produk')
 
 @section('content')
-
 <style>
     .card {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -44,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <div class="content-body">
+        <div class="content-body product_data">
             @can('admin')
             <div class="header">
                 <a href="{{route('produk.create')}}" class="btn btn-primary waves-effect waves-float waves-light">Tambah produk</a>
@@ -63,18 +62,25 @@
                             <div class="card-body">
                                 <p class="card-title font-weight-bolder mt-0 mb-1">{{$item->judul}}</p>
                                 <p class="card-text">{{$item->penulis}}</p>
+                                <p class="card-text">Rp. {{$item->harga}}</p>
                             </div>
-                            {{-- <div class="card-body">
-                                <a href="{{route('produk.edit', $item->id)}}" class="card-link">Edit</a>
-                                <a href="#" data-id="{{$item->id}}" class="card-link">Delete</a>
-                            </div> --}}
-                            
                         </div>
-                        <button class="btn btn-block btn-primary btn-add-to-cart" data-id="{{$item->id}}">
-                            <i class="fa fa-shopping-cart"></i> Tambahkan Ke Keranjang
+                        {{-- @can('user')
+                        <div class="text-center">
+                            <input type="hidden" value="{{$item->id}}" class="product_id" >
+                            <label for="quantity">Kuantitas</label>
+                            <div id="tambahkurang" >
+                                <button class="btn btn-primary btn-sm decrement-btn" data-id="{{$item->id}}"> - </button>
+                                <input type="hidden" data-id="{{$item->id}}" class="product_qty">
+                                <input type="text" name="qty" class="text-center qty-input" value="1" style="width: 25px;" >
+                                <button class="btn btn-primary btn-sm increment-btn" data-id="{{$item->id}}"> + </button>
+                            </div>
+                        </div><br>
+                        <button type="button" class="btn btn-primary btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0 ml-2 btn-add-to-cart" >
+                            <i data-feather="shopping-cart" class="mr-40"></i>
+                            <span class="add-to-cart">Add to cart</span>
                         </button>
-
-                        {{-- <a href="{{route('cart.index')}}" class="btn btn-primary waves-effect waves-float waves-light">Cart</a> --}}
+                        @endcan --}}
                     </div>
                     @endforeach                    
                 </div>
@@ -90,34 +96,104 @@
 @push('scripts')
     <script>
         $(document).ready(function () {
-            $(document).ready(function () {
             $('.btn-add-to-cart').click(function () {
+                var prod_id = $(this).closest('.product_data').find('.product_id').val();
+                var prod_qty = $(this).closest('.product_data').find('.qty-input').val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "{{route('cart.store')}}",
+                    method: "POST",
+                    data: {
+                        'product_id' : prod_id,
+                        'qty' : prod_qty, 
+                        _token: '{{csrf_token()}}'
+                    }, success: function (response){
+                        alert(response.status);
+                    }
+                });
+
+                
+            });
+
+            // $('#tambahkurang').on('click', '.decrement-btn', function () {
+            $('.decrement-btn').click(function () {
+                // var id = $(this).data('id');
+                // var kuantitas = parseInt($(this).data('qty'))-1;
+                // $.ajax({
+                //     url: "{{url('cart')}}/" + id,
+                //     type: "POST",
+                //     data: {
+                //         'qty': kuantitas,
+                //         _token: '{{csrf_token()}}',
+                //         _method: 'PUT'
+                //     }
+                // });
+                var dec_value = $('.qty-input').val();
+                var value = parseInt(dec_value, 10);
+                value = isNaN(value) ? 0 : value;
+                if (value > 1) {
+                    value--;
+                    $('.qty-input').val(value);
+                } else {
+                    
+                }
+            });
+
+            // $('#tambahkurang').on('click', '.increment-btn', function () {
+            $('.increment-btn').click(function () {
+                // var id = $(this).data('id');
+                // var kuantitas = parseInt($(this).data('qty'))+1;
+                // $.ajax({
+                //     url: "{{url('cart')}}/" + id,
+                //     type: "POST",
+                //     data: {
+                //         'qty': kuantitas,
+                //         _token: '{{csrf_token()}}',
+                //         _method: 'PUT'
+                //     }
+                // });
+                var inc_value = $('.qty-input').val();
+                var value = parseInt(inc_value, 10);
+                value = isNaN(value) ? 0 : value;
+                if (value < 10) {
+                    value++;
+                    $('.qty-input').val(value);
+                } else {
+                    
+                }
+            });
+
+            $('#cart-items').on('click', '.cart-item-remove', function () {
                 var id = $(this).data('id');
                 $.ajax({
-                    url: "{{route('cart.create')}}",
+                    url: "{{url('cart-session')}}/"+id,
                     type: "POST",
                     data: {
-                        id_produk: id,
-                        _token: '{{csrf_token()}}'
+                        _token: '{{csrf_token()}}',
+                        _method: 'DELETE'
                     },
                     success: function (data) {
                         $('#cart-count').html(data.data.cart_item_count);
                         $('#cart-count-label').html(data.data.cart_item_count+" Items");
                         $('#cart-total').html(data.data.cart_total);
                         $('#cart-items').html(data.data.cart_items);
-                        toastr.success('Keranjang berhasil diperbarui', 'Berhasil!', {
-                            closeButton: true,
-                            tapToDismiss: false
-                        });
                         if (feather) {
                             feather.replace({
                                 width: 14,
                                 height: 14
                             });
                         }
+                        toastr.success('Data berhasil dihapus!', 'Berhasil!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
                     },
                     error: function (data) {
-                        toastr.error('Keranjang gagal diperbarui', 'Gagal!', {
+                        toastr.error('Terjadi kesalahan!', 'Gagal!', {
                             closeButton: true,
                             tapToDismiss: false
                         });
@@ -169,7 +245,6 @@
             });
 
         });
-
     </script>
 @endpush
 

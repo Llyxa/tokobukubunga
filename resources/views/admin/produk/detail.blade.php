@@ -52,8 +52,8 @@
                                         <h4>{{$product->judul}}</h4>
                                         <span class="card-text item-company">Written by <a href="javascript:void(0)" class="company-name">{{$product->penulis}}</a></span>
                                         
-                                        <div class="ecommerce-details-price d-flex flex-wrap mt-1">
-                                            <h4>Rp. {{$product->harga}}</h4><h4 class="item-price mr-1" id="harga" name="harga" value="{{$product->harga}}" disabled="" onkeyup="OnChange(this.value)" onKeyPress="return isNumberKey(event)"></h4>
+                                        <div class="ecommerce-details-price d-flex flex-wrap mt-1"> 
+                                            <h4>Rp. {{number_format($product->harga)}} </h4><h4 class="item-price mr-1" id="harga" name="harga" value="{{$product->harga}}" disabled="" onkeyup="OnChange(this.value)" onKeyPress="return isNumberKey(event)"></h4>
                                             <ul class="unstyled-list list-inline pl-1 border-left">
                                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
                                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
@@ -62,7 +62,11 @@
                                                 <li class="ratings-list-item"><i data-feather="star" class="unfilled-star"></i></li>
                                             </ul>
                                         </div>
-                                        <p class="card-text">Available - <span class="text-success">{{$product->stok}}</span></p>
+                                        @if ($product->stok > 0)
+                                            <p class="card-text">Available - <span class="text-success">{{$product->stok}}</span></p>
+                                        @else
+                                            <p class="card-text">Not Available
+                                        @endif
                                         <p class="card-text">
                                             {{$product->sinopsis}}
                                         </p><br>
@@ -111,9 +115,9 @@
                             <!-- Product Details ends -->
                         </div>
                     
-                        {{-- @can('user') --}}
+                        @can('user')
                         <!-- Transaction Card -->
-                        <div class="card col-lg-4">
+                        <div class="card col-lg-6">
                             <div class="card card-transaction">
                                 <div class="card-header">
                                     <h5 class="mb-0">Atur Jumlah</h5>
@@ -129,23 +133,23 @@
                                     <div class="transaction-item">
                                         <div class="media">
                                             <div class="item-quantity">
-                                                
-                                                <form action="{{ route('cartdetail.store') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="product_id" value={{$product->id}}>
-                                                    <button class="btn btn-block btn-primary" type="submit">
-                                                    <i class="fa fa-shopping-cart"></i> Tambahkan Ke Keranjang
-                                                    </button>
-                                                  </form>
-                                                  
-                                                {{-- <span class="quantity-title">Kuantitas:</span> --}}
-                                                {{-- <form action="{{route('keranjang.store')}}" method="POST">
-                                                    @csrf
-                                                    <div class="input-group quantity-counter-wrapper">
-                                                        <input type="text" class="quantity-counter" value="1" name="" />
+                                                    {{-- @can('user') --}}
+                                                    <div class="">
+                                                        <input type="hidden" value="{{$product->id}}" class="product_id" >
+                                                        {{-- <label for="quantity">Kuantitas</label> --}}
+                                                        <div id="tambahkurang" >
+                                                            <button class="btn btn-primary btn-sm decrement-btn" > - </button>
+                                                            {{-- <input type="hidden" data-id="{{$product->id}}" class="product_qty"> --}}
+                                                            <input type="text" name="qty" class="text-center qty-input" value="1" style="width: 25px;" >
+                                                            <button class="btn btn-primary btn-sm increment-btn" > + </button>
+                                                        </div>
                                                     </div>
-                                                    <button type="submit" class="btn btn-primary"><i data-feather="shopping-cart" class="mr-50"></i>Add To Cart</button>
-                                                </form> --}}
+                                                    
+                                                    {{-- @endcan --}}
+                                                    {{-- <div class="d-flex justify-content-end">
+                                                        Total : Rp. <p class="disabled pricee d-inline-block">0</p>
+                                                        <input type="hidden" id="priceee" name="price_total">
+                                                    </div> --}}
                                             </div>
                                         </div>
                                     </div><hr />
@@ -160,11 +164,20 @@
                                     <div class="transaction-item">
                                         <div class="media">
                                             <div class="media-body">
+                                                <button type="button" class="btn btn-primary btn-cart btn-add-to-cart" >
+                                                    <i data-feather="shopping-cart" class="mr-40"></i>
+                                                    <span class="add-to-cart">Add to cart</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {{-- </div>
+                                    <div class="transaction-item"> --}}
+                                        <div class="media">
+                                            <div class="media-body">
                                                 <a href="/transaksi" class="btn btn-primary mr-0 mr-sm-1 mb-1 mb-sm-0">
                                                     <span class="">Buy Now</span>
                                                 </a>
-
-                                                
+                            
                                                 {{-- <form method="POST" action="{{url('cart',  $product->id) }}">
                                                 @csrf
                                                     <a href="javascript:void(0)" class="btn btn-primary btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0">
@@ -174,8 +187,8 @@
                                                 </form> --}}
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="transaction-item">
+                                    {{-- </div>
+                                    <div class="transaction-item"> --}}
                                         <div class="media">
                                             <div class="media-body">
                                                 <a href="javascript:void(0)" class="btn btn-outline-secondary btn-wishlist mr-0 mr-sm-1 mb-1 mb-sm-0">
@@ -208,7 +221,7 @@
                             </div>
                         </div>
                         <!--/ Transaction Card -->
-                        {{-- @endcan --}}
+                        @endcan
 
                         <!-- Related Products starts -->
                             {{-- <div class="card-body">
@@ -343,17 +356,208 @@
 @endpush
 
 @push('scripts')
-    <script>
+<script>
+    $(document).ready(function () {
+        $('.btn-add-to-cart').click(function () {
+            var prod_id = $(this).closest('.product_data').find('.product_id').val();
+            var prod_qty = $(this).closest('.product_data').find('.qty-input').val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{route('cart.store')}}",
+                method: "POST",
+                data: {
+                    'product_id' : prod_id,
+                    'qty' : prod_qty, 
+                    _token: '{{csrf_token()}}'
+                }, success: function (response){
+                    alert(response.status);
+                }
+            });
 
-        // const [qty, setQty] = useState(1);
-        // const submitAddToCart = (e) => {
-        //         e.preventDefault();
+            
+        });
+
+        // $('#tambahkurang').on('click', '.decrement-btn', function () {
+        $('.decrement-btn').click(function () {
+            // var id = $(this).data('id');
+            // var kuantitas = parseInt($(this).data('qty'))-1;
+            // $.ajaxSetup({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     }
+            // });
+            // $.ajax({
+            //     url: "{{url('cart')}}/" + id,
+            //     type: "POST",
+            //     data: {
+            //         'qty': kuantitas,
+            //         _token: '{{csrf_token()}}',
+            //         _method: 'PUT'
+            //     }
+            // });
+            var dec_value = $('.qty-input').val();
+            var value = parseInt(dec_value, 10);
+            value = isNaN(value) ? 0 : value;
+            if (value > 1) {
+                value--;
+                $('.qty-input').val(value);
+            } else {
                 
-        //         const data = {
-        //             product_id: product.id,
-        //             product_qty: qty
-        //         }
-        //     }
+            }
+        });
+
+        // $('#tambahkurang').on('click', '.increment-btn', function () {
+        $('.increment-btn').click(function () {
+            // var id = $(this).data('id');
+            // var kuantitas = parseInt($(this).data('qty'))+1;
+            // $.ajaxSetup({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     }
+            // });
+            // $.ajax({
+            //     url: "{{url('cart')}}/" + id,
+            //     type: "POST",
+            //     data: {
+            //         'qty': kuantitas,
+            //         _token: '{{csrf_token()}}',
+            //         _method: 'PUT'
+            //     }
+            // });
+            var inc_value = $('.qty-input').val();
+            var value = parseInt(inc_value, 10);
+            value = isNaN(value) ? 0 : value;
+            if (value < 10) {
+                value++;
+                $('.qty-input').val(value);
+            } else {
+                
+            }
+        });
+
+        $('#cart-items').on('click', '.cart-item-remove', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: "{{url('cart-session')}}/"+id,
+                type: "POST",
+                data: {
+                    _token: '{{csrf_token()}}',
+                    _method: 'DELETE'
+                },
+                success: function (data) {
+                    $('#cart-count').html(data.data.cart_item_count);
+                    $('#cart-count-label').html(data.data.cart_item_count+" Items");
+                    $('#cart-total').html(data.data.cart_total);
+                    $('#cart-items').html(data.data.cart_items);
+                    if (feather) {
+                        feather.replace({
+                            width: 14,
+                            height: 14
+                        });
+                    }
+                    toastr.success('Data berhasil dihapus!', 'Berhasil!', {
+                        closeButton: true,
+                        tapToDismiss: false
+                    });
+                },
+                error: function (data) {
+                    toastr.error('Terjadi kesalahan!', 'Gagal!', {
+                        closeButton: true,
+                        tapToDismiss: false
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.btn-del', function () {
+            var id = $(this).data('id');
+            Swal.fire({
+                icon: 'error',
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            })
+                .then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            'url': "{{url('produk')}}/" + id,
+                            'type': 'post',
+                            'data': {
+                                '_method': 'DELETE',
+                                '_token': '{{csrf_token()}}'
+                            },
+                            success: function (response) {
+                                if (response == 1) {
+                                    toastr.error('Data gagal dihapus!', 'Gagal!', {
+                                        closeButton: true,
+                                        tapToDismiss: false
+                                    });
+                                } else {
+                                    toastr.success('Data berhasil dihapus!', 'Berhasil!', {
+                                        closeButton: true,
+                                        tapToDismiss: false
+                                    });
+                                    location.reload();
+                                }
+                            }
+                        });
+                    } else {
+                        console.log(`dialog was dismissed by ${result.dismiss}`)
+                    }
+
+                });
+        });
+
+    });
+</script>
+{{-- <script>
+    const minusButton = document.getElementById('minus');
+    const plusButton = document.getElementById('plus');
+    const inputField = document.getElementById('qty');
+    const input = document.getElementById('priceee');
+    
+    
+    $(inputField).on('keyup', () => {
+        const currentValue = Number(inputField.value);
+        if (currentValue != 0){
+            const price = $('.pricee').text('{{ $product->harga }}'* +inputField.value);
+            input.value = price.text();
+        }else{
+            $('.pricee').text('0');
+        }
+    })
+    minusButton.addEventListener('click', event => {
+        event.preventDefault();
+        const currentValue = Number(inputField.value) || 0;
+        if (currentValue != 0){
+            inputField.value = currentValue - 1;
+            const price = $('.pricee').text('{{ $product->harga }}'*+inputField.value);
+            input.value = price.text();
+        }else{
+            $('.pricee').text('0');
+        }
+        
+    });
+    
+    plusButton.addEventListener('click', event => {
+        event.preventDefault();
+        const currentValue = Number(inputField.value) || 0;
+        inputField.value = currentValue + 1;
+        const price = $('.pricee').text('{{ $product->harga }}'*+inputField.value);
+        input.value = price.text();
+    
+    });
+
+</script>
+    <script>
         $(document).ready(function () {
             $(document).on('click', '.btn-del', function () {
                 var id = $(this).data('id');
@@ -399,68 +603,7 @@
             });
         });
             
-        
-        // $('.kuantitas').keyup(function(){
-        //     sub_total();
-        // });
-                
-        // $('.total_beli').change(function(){
-        //     sub_total();
-        //     });
-        // });
-                
-        // function sub_total(){
-        //     var sum = 0;
-        //     $('.formD').each(function(){
-        //         var jml_brg = $(this).find('input[kuantitas]').val();
-        //         var harga_beli = $(this).find('.input[harga]').val();
-        //         var sub_total = (jml_brg * harga_beli) sum+harga_beli;
-        //         $(this).find('.total_beli').text(''+ total_beli);
-        //     });
-        // });
-        // $('.total_beli').text(sum);
-        
-        
-
-        // function qty()
-		// {
-		// 	var bayar = document.getElementById('#kuantitas').value;
-		// 	if (bayar == "")
-		// 	{
-		// 		document.getElementById('#hasil_hitung').value ="Error";
-		// 	}
-		// 	else
-		// 	{
-		// 		var hasil_hitung = bayar * 10000;
-		// 		document.getElementById('#hasil_hitung').value = hasil_hitung;
-		// 	}
-		// }
-        
-        // function total() {
-        // var harga_satuan = document.formD.harga.value;
-        // var jumlah = document.formD.kuantitas.value; 
-		// var total_bayar = harga_satuan * jumlah;
-
-		// var jumlah_harga = total_bayar;
-
-		// document.getElementById('total_harga').value = jumlah_harga;
-	    // }
-    
-        // hargasatuan = document.formD.harga.value;
-        // document.formD.total_harga.value = hargasatuan;
-
-        // jumlah = document.formD.kuantitas.value;
-        // document.formD.total_harga.value = jumlah;
-        
-        // function OnChange(value){
-        //     hargasatuan = document.formD.harga.value;
-        //     jumlah = document.formD.kuantitas.value;
-        //     total = hargasatuan * jumlah;
-        //     document.formD.total_harga.value = total;
-        // }
-    
-    
-    </script>
+    </script> --}}
 @endpush
 
 

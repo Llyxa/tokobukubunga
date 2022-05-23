@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Psy\Util\Str;
+use App\Models\Cart;
 use App\Models\Genre;
+use App\Models\Total;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Publisher;
@@ -26,7 +28,14 @@ class ProdukController extends Controller
     public function index()
     {
         $data['produk'] = Product::all();
+        // 'total' => Total::total(),
         return view('admin.produk.index', $data);
+        // return view('admin.produk.index', [
+        //     'products' => Product::latest()->paginate(6),
+        //     'carts' => @Cart::where('user_id', '=', Auth::user()->id)->get(),
+        //     'total' => Total::total(),
+        // ]);
+
     }
 
     /**
@@ -39,7 +48,17 @@ class ProdukController extends Controller
         $data['kategori'] = Category::all();
         $data['genre'] = Genre::all();
         $data['penerbit'] = Publisher::all();
+        // $data['cart'] = Cart::all();
         return view('admin.produk.form', $data );
+
+        // return view('admin.produk.form', [
+        //     'categories' => Category::all(),
+        //     'genres' => Genre::all(),
+        //     'publishers' => Publisher::all(),
+        //     'carts' => @Cart::where('user_id', '=', Auth::user()->id)->get(),
+        //     'total' => Total::total(),
+        // ]);
+
     }
 
     /**
@@ -102,15 +121,26 @@ class ProdukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product, $id)
     {
         
         $data['product'] = Product::find($id);
         $data['publisher'] = Publisher::all();
         $data['category'] = Category::all();
+        // $data['cart'] = Cart::all();
         $data['genre'] = DB::table('genres')->where('genre')->get();
 
         return view('admin.produk.detail', $data);
+
+        // return view('admin.produk.detail', [
+        //     'product' => $product->find($product->id),
+        //     'categories' => Category::all(),
+        //     'genres' => DB::table('genres')->where('genre')->get(),
+        //     'publishers' => Publisher::all(),
+        //     'carts' => @Cart::where('user_id', '=', Auth::user()->id)->get(),
+        //     'total' => Total::total(),
+        // ]);
+
     }
 
     /**
@@ -119,13 +149,23 @@ class ProdukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product, $id)
     {
         $data['produk'] = Product::find($id);
         $data['kategori'] = Category::all();
         $data['genre'] = Genre::all();
         $data['penerbit'] = Publisher::all();
         return view('admin.produk.form', $data);
+
+        // return view('admin.produk.form', [
+        //     'product' => $product,
+        //     'categories' => Category::all(),
+        //     'genres' => Genre::all(),
+        //     'publishers' => Publisher::all(),
+        //     'carts' => @Cart::where('user_id', '=', Auth::user()->id)->get(),
+        //     'total' => Total::total(),
+        // ]);
+
     }
 
     /**
@@ -135,7 +175,7 @@ class ProdukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,  Product $product)
     {
         $request->validate([
             'category_id' => 'required',
@@ -147,8 +187,10 @@ class ProdukController extends Controller
             'harga' => 'required|numeric',
             'stok' => 'required|numeric',
         ]);
-        $produk = Product::find($id);
 
+        $genres = implode(', ' , $request->genre_id);
+
+        $product->find($product->id);
         if ($request->image){
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path() . '/storage/foto/', $imageName);
@@ -159,7 +201,7 @@ class ProdukController extends Controller
         $produk->update([
             'category_id' => $request['category_id'],
             'publisher_id' => $request['publisher_id'],
-            'genre_id' => $request['genre_id'],
+            'genre_id' => $genres,
             'judul' => $request['judul'],
             'penulis' => $request['penulis'],
             'sinopsis' => $request['sinopsis'],
@@ -167,12 +209,22 @@ class ProdukController extends Controller
             'stok' => $request['stok'],
             'image' => $imageName
         ]);
-
-        if ($produk){
-            return redirect()->route('produk.index')->with('success', 'Data berhasil diubah');
-        } else {
-            return redirect()->route('produk.create')->with('error', 'Data gagal diubah');
+        
+        $genress = $request->genre_id;
+        foreach($genress as $genre){
+           GenreProduct::update ([
+                'product_id' => $produk->id,
+                'genre_id' => $genre
+            ]);
         }
+
+        return redirect(route('product.index'))->with('success', 'Successfully Update Product');
+        
+        // if ($produk){
+        //     return redirect()->route('produk.index')->with('success', 'Data berhasil diubah');
+        // } else {
+        //     return redirect()->route('produk.create')->with('error', 'Data gagal diubah');
+        // }
     }
 
     /**
@@ -181,7 +233,7 @@ class ProdukController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id){
+    public function destroy( Product $product){
         $produk = Product::find($id);
         $status = $produk->delete();
         if ($status){

@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('produt_id');
+            $table->string('user_id');
+            $table->string('product_id');
             $table->integer('qty')->default(0);
             // $table->double('harga')->default(0); harga dari tabel products
-            $table->double('subtotal')->default(0);
+            // $table->double('subtotal')->default(0);
             $table->timestamps();
         });
     }

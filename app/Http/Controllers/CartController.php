@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -15,7 +16,8 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-
+        $cart_items = Cart::where('user_id', Auth::id())->get();
+        return view('cart.index', compact('cart_items'));
     }
 
     /**
@@ -25,8 +27,7 @@ class CartController extends Controller
      */
     public function create()
     {
-        $data['cart_items'] = Cart::all();
-        return view('cart.index', $data );
+        //
     }
 
     /**
@@ -37,63 +38,43 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->validate($request, [
-        //     'product_id' => 'required',
-        // ]);
+        // dd($request);
+        $produk = $request->input('id');
+        $kuantitas = $request->input('qty');
 
-        // $produk = Product::findOrFail($request->product_id);
-        // $cart_items = Cart::all();
+        if (Auth::check()) {
+            $prod_check = Product::where('id', $produk)->first();
 
-        // if($cart_items){
-        //     $cart_items['qty'] += 1;
-        // }else{
-        //     $cart_items = [
-        //     'produk' => $produk,
-        //     'qty' => 1,
-        //     ];
-        // }
+            if ($prod_check) {
 
-        // try{
-        //     $produk = Product::findOrFail($request->product_id);
-        //     $cart_items = session()->get('cart_items', []);
-        //     $cart_items = Cart::all();
-        //     $cart_total = 0;
+                if (Cart::where('product_id', $produk)->where('user_id', Auth::id())->exists()) 
+                {
+                    return response()->json(['status' => $prod_check->judul. " already added to cart"]);
+                } 
+                else 
+                {
+                    $cart_item = new Cart();
+                    $cart_item->product_id = $produk;
+                    $cart_item->user_id = Auth::id();
+                    $cart_item->qty = $kuantitas;
+                    $cart_item->save;
 
+                    return response()->json(['status' => $prod_check->judul. " added to cart"]);
+                }
 
+            //     $cart_item = new Cart();
+            //     $cart_item->product_id = $produk;
+            //     $cart_item->user_id = Auth::id();
+            //     $cart_item->qty = $kuantitas;
+            //     $cart_item->save;
 
-        //     if(array_key_exists($request->product_id, $cart_items)){
-        //         $cart_items[$request->product_id]['qty'] += 1;
-        //     }else{
-        //         $cart_items[$request->product_id] = [
-        //             'produk' => $produk,
-        //             'qty' => 1,
-        //         ];
-        //     }
-
-        //     foreach($cart_items as $item){
-        //         $cart_total += $item['produk']->harga * $item['qty'];
-        //     }
-
-        //     session()->put('cart_items', $cart_items);
-        //     session()->put('cart_total', $cart_total);
-        //     session()->put('cart_count', count($cart_items));
-
-        //     return response()->json([
-        //         'status' => 'success',
-        //         'message' => 'Produk berhasil ditambahkan ke keranjang',
-        //         'data' => [
-        //             'cart_items' => view('cart.cart_items')->render(),
-        //             'cart_total' => 'Rp '.number_format($cart_total),
-        //             'cart_item_count' => count($cart_items),
-        //         ],
-        //     ]);
-        // }catch(\Exception $e){
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => $e->getMessage(),
-        //     ], 500);
-        // }
-
+            //     return response()->json(['status' => "Added to cart"]);
+                
+            // }
+            } else {
+                return response()->json(['status' => "Cannot added to cart"]);
+            }
+        }
     }
 
     /**
@@ -125,44 +106,9 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Cart $cart)
     {
-        $this->validate($request, [
-            'qty' => 'required',
-        ]);
-
-        try{
-            $cart_items = session()->get('cart_items', []);
-            $cart_total = 0;
-
-            if(array_key_exists($id, $cart_items)){
-                $cart_items[$id]['qty'] = $request->qty;
-            }
-
-            foreach($cart_items as $item){
-                $cart_total += $item['produk']->harga * $item['qty'];
-            }
-
-            session()->put('cart_items', $cart_items);
-            session()->put('cart_total', $cart_total);
-            session()->put('cart_count', count($cart_items));
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Produk berhasil ditambahkan ke keranjang',
-                'data' => [
-                    'cart_items' => view('cart.cart_items')->render(),
-                    'cart_total' => 'Rp '.number_format($cart_total),
-                    'cart_item_count' => count($cart_items),
-                ],
-            ]);
-        }catch(\Exception $e){
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
-        }
-
+        //
     }
 
     /**
@@ -171,39 +117,9 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Cart $cart)
     {
-        try{
-            $cart_items = session()->get('cart_items', []);
-            $cart_total = 0;
-
-            if(array_key_exists($id, $cart_items)){
-                unset($cart_items[$id]);
-            }
-
-            foreach($cart_items as $item){
-                $cart_total += $item['produk']->harga * $item['qty'];
-            }
-
-            session()->put('cart_items', $cart_items);
-            session()->put('cart_total', $cart_total);
-            session()->put('cart_count', count($cart_items));
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Produk berhasil ditambahkan ke keranjang',
-                'data' => [
-                    'cart_items' => view('cart.cart_items')->render(),
-                    'cart_total' => 'Rp '.number_format($cart_total),
-                    'cart_item_count' => count($cart_items),
-                ],
-            ]);
-        }catch(\Exception $e){
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
-        }
+        //
     }
 
 }
