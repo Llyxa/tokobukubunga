@@ -26,7 +26,7 @@ Illuminate\Support\Facades\Auth::routes();
     // Route::get('/keranjang', 'ProdukController@checkout');
     // Route::resource('detail-transaksi', \App\Http\Controllers\DetailTransaksiController::class);
     Route::resource('cart', \App\Http\Controllers\CartController::class);
-    Route::resource('cart-session', App\Http\Controllers\CartSessionController::class);
+    Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');

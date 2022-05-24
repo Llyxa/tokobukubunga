@@ -114,6 +114,7 @@
                                             @else
                                                 <p class="card-text">Not Available
                                             @endif
+                                            <h4 class="item-price">Rp. {{number_format($item->$product->harga)}}</h4>
                                             {{-- <span class="text-success mb-1">In Stock </span> --}}
                                             <div class="item-quantity">
                                                 {{-- <input type="hidden" value="{{$product->id}}" class="product_id" > --}}
@@ -131,7 +132,8 @@
                                         <div class="item-options text-center">
                                             <div class="item-wrapper">
                                                 <div class="item-cost">
-                                                    <h4 class="item-price">Rp. {{number_format($item->$product->harga)}}</h4>
+                                                    Total : Rp. <p class="disabled pricee d-inline-block">0</p>
+                                                    <input type="hidden" id="priceee" name="price_total">
                                                     <p class="card-text shipping">
                                                         <span class="badge badge-pill badge-light-success">Free Shipping</span>
                                                     </p>
@@ -402,182 +404,121 @@
 @endpush
 
 @push('scripts')
-    <script>
-        $(document).ready(function () {
-            // $('#tambahkurang').on('click', '.decrement-btn', function () {
-        $('.decrement-btn').click(function () {
-            var id = $(this).data('id');
-            var kuantitas = parseInt($(this).data('qty'))-1;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{url('cart')}}/" + id,
-                type: "POST",
-                data: {
-                    'qty': kuantitas,
-                    _token: '{{csrf_token()}}',
-                    _method: 'PUT'
-                }
-            });
-            // var dec_value = $('.qty-input').val();
-            // var value = parseInt(dec_value, 10);
-            // value = isNaN(value) ? 0 : value;
-            // if (value > 1) {
-            //     value--;
-            //     $('.qty-input').val(value);
-            // } else {
-                
-            // }
-        });
+<script>
+    const minusButton = document.getElementById('.decrement-btnn');
+    const plusButton = document.getElementById('.increment-btn');
+    const inputField = document.getElementById('.qty-input');
+    const input = document.getElementById('priceee')
+    
+    
+    $(inputField).on('keyup', () => {
+        const currentValue = Number(inputField.value);
+        if (currentValue != 0){
+            const price = $('.pricee').text('{{ $product->harga }}'* +inputField.value);
+            input.value = price.text();
+        }else{
+            $('.pricee').text('0');
+        }
+    })
+    minusButton.addEventListener('click', event => {
+        event.preventDefault();
+        const currentValue = Number(inputField.value) || 0;
+        if (currentValue != 0){
+            inputField.value = currentValue - 1;
+            const price = $('.pricee').text('{{ $product->harga }}'*+inputField.value);
+            input.value = price.text();
+        }else{
+            $('.pricee').text('0');
+        }
+        
+    });
+    
+    plusButton.addEventListener('click', event => {
+        event.preventDefault();
+        const currentValue = Number(inputField.value) || 0;
+        inputField.value = currentValue + 1;
+        const price = $('.pricee').text('{{ $product->harga }}'*+inputField.value);
+        input.value = price.text();
+    
+    });
 
-        // $('#tambahkurang').on('click', '.increment-btn', function () {
-        $('.increment-btn').click(function () {
-            var id = $(this).data('id');
-            var kuantitas = parseInt($(this).data('qty'))+1;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{url('cart')}}/" + id,
-                type: "POST",
-                data: {
-                    'qty': kuantitas,
-                    _token: '{{csrf_token()}}',
-                    _method: 'PUT'
-                }
-            });
-            // var inc_value = $('.qty-input').val();
-            // var value = parseInt(inc_value, 10);
-            // value = isNaN(value) ? 0 : value;
-            // if (value < 10) {
-            //     value++;
-            //     $('.qty-input').val(value);
-            // } else {
-                
-            // }
-        });
-
-            $('#cart-items').on('click', '.cart-item-remove', function () {
-                var id = $(this).data('id');
-                $.ajax({
-                    url: "{{url('cart-session')}}/"+id,
-                    type: "POST",
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        _method: 'DELETE'
-                    },
-                    success: function (data) {
-                        $('#cart-count').html(data.data.cart_item_count);
-                        $('#cart-count-label').html(data.data.cart_item_count+" Items");
-                        $('#cart-total').html(data.data.cart_total);
-                        $('#cart-items').html(data.data.cart_items);
-                        if (feather) {
-                            feather.replace({
-                                width: 14,
-                                height: 14
-                            });
-                        }
-                        toastr.success('Data berhasil dihapus!', 'Berhasil!', {
-                            closeButton: true,
-                            tapToDismiss: false
-                        });
-                    },
-                    error: function (data) {
-                        toastr.error('Terjadi kesalahan!', 'Gagal!', {
-                            closeButton: true,
-                            tapToDismiss: false
-                        });
-                    }
-                });
-            });
-
-            $(document).on('click', '.btn-del', function () {
-                var id = $(this).data('id');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    type: 'error',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                })
-                    .then((result) => {
-                        if (result.value) {
-                            $.ajax({
-                                'url': '{{url('produk')}}/' + id,
-                                'type': 'post',
-                                'data': {
-                                    '_method': 'DELETE',
-                                    '_token': '{{csrf_token()}}'
-                                },
-                                success: function (response) {
-                                    if (response == 1) {
-                                        toastr.error('Data gagal dihapus!', 'Gagal!', {
-                                            closeButton: true,
-                                            tapToDismiss: false
-                                        });
-                                    } else {
-                                        toastr.success('Data berhasil dihapus!', 'Berhasil!', {
-                                            closeButton: true,
-                                            tapToDismiss: false
-                                        });
-                                        window.location = "http://localhost:8000/produk/";
-                                    }
-                                }
-                            });
-                        } else {
-                            console.log(`dialog was dismissed by ${result.dismiss}`)
-                        }
-
+    $('#cart-items').on('click', '.cart-item-remove', function () {
+        var id = $(this).data('id');
+        $.ajax({
+            url: "{{url('cart')}}/"+id,
+            type: "POST",
+            data: {
+                _token: '{{csrf_token()}}',
+                _method: 'DELETE'
+            },
+            success: function (data) {
+                $('#cart-count').html(data.data.cart_item_count);
+                $('#cart-count-label').html(data.data.cart_item_count+" Items");
+                $('#cart-total').html(data.data.cart_total);
+                $('#cart-items').html(data.data.cart_items);
+                if (feather) {
+                    feather.replace({
+                        width: 14,
+                        height: 14
                     });
-            });
-
+                }
+                toastr.success('Data berhasil dihapus!', 'Berhasil!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+            },
+            error: function (data) {
+                toastr.error('Terjadi kesalahan!', 'Gagal!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+            }
         });
+    });
 
-        
-        // $('.increment-btn').click(function (e) {
-        //     e.preventDefault();
-        //     var incre_value = $(this).parents('.quantity').find('.qty-input').val();
-        //     var value = parseInt(incre_value, 10);
-        //     value = isNaN(value) ? 0 : value;
-        //     if(value<10){
-        //         value++;
-        //         $(this).parents('.quantity').find('.qty-input').val(value);
-        //     }
+    $(document).on('click', '.btn-del', function () {
+        var id = $(this).data('id');
+        Swal.fire({
+            icon: 'error',
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        })
+            .then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        'url': '{{url('produk')}}/' + id,
+                        'type': 'post',
+                        'data': {
+                            '_method': 'DELETE',
+                            '_token': '{{csrf_token()}}'
+                        },
+                        success: function (response) {
+                            if (response == 1) {
+                                toastr.error('Data gagal dihapus!', 'Gagal!', {
+                                    closeButton: true,
+                                    tapToDismiss: false
+                                });
+                            } else {
+                                toastr.success('Data berhasil dihapus!', 'Berhasil!', {
+                                    closeButton: true,
+                                    tapToDismiss: false
+                                });
+                                window.location = "http://localhost:8000/produk/";
+                            }
+                        }
+                    });
+                } else {
+                    console.log(`dialog was dismissed by ${result.dismiss}`)
+                }
 
-        // });
-
-        // $('.decrement-btn').click(function (e) {
-        //     e.preventDefault();
-        //     var decre_value = $(this).parents('.quantity').find('.qty-input').val();
-        //     var value = parseInt(decre_value, 10);
-        //     value = isNaN(value) ? 0 : value;
-        //     if(value>1){
-        //         value--;
-        //         $(this).parents('.quantity').find('.qty-input').val(value);
-        //     }
-        // });
-
-    // hargasatuan = document.formD.harga.value;
-    //     document.formD.total_harga.value = hargasatuan;
-
-    //     jumlah = document.formD.kuantitas.value;
-    //     document.formD.total_harga.value = jumlah;
-        
-    //     function OnChange(value){
-    //         hargasatuan = document.formD.harga.value;
-    //         jumlah = document.formD.kuantitas.value;
-    //         total = hargasatuan * jumlah;
-    //         document.formD.total_harga.value = total;
-    //     }
-    </script>
+            });
+    });
+</script>
 @endpush
 
 

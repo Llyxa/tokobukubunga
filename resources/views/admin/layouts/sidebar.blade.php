@@ -41,7 +41,7 @@
             <li class="@yield('listbuku')"><a class="d-flex align-items-center" href="{{route('produk.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">List Buku</span></a>
             </li>
             {{-- @can('user') --}}
-            <li class="@yield('keranjang')"><a class="d-flex align-items-center" href="{{route('cart.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Keranjang</span></a>
+            <li class="@yield('keranjang')"><a class="d-flex align-items-center" href="{{route('transaksi.index')}}"><i data-feather='bookmark'></i></i><span class="menu-title text-truncate" data-i18n="Kanban">Keranjang</span></a>
             </li>
             {{-- @endcan --}}
             @can('admin')

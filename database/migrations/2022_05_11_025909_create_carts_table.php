@@ -13,13 +13,26 @@ return new class extends Migration
      */
     public function up()
     {
+        // Schema::create('carts', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('user_id');
+        //     $table->string('product_id');
+        //     $table->integer('qty')->default(0);
+        //     // $table->double('harga')->default(0); harga dari tabel products
+        //     $table->double('subtotal');
+        //     $table->timestamps();
+        // });
+
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
-            $table->string('product_id');
-            $table->integer('qty')->default(0);
-            // $table->double('harga')->default(0); harga dari tabel products
-            // $table->double('subtotal')->default(0);
+            $table->foreignId('transaction_id');
+            $table->foreignId('product_id');
+            // $table->integer('produk_id')->unsigned();
+            // $table->integer('cart_id')->unsigned();
+            $table->double('qty', 12, 2)->default(0);
+            $table->double('harga', 12, 2)->default(0);
+            $table->double('diskon', 12, 2)->default(0);
+            $table->double('subtotal', 12, 2)->default(0);
             $table->timestamps();
         });
     }

@@ -65,22 +65,21 @@
                                 <p class="card-text">Rp. {{$item->harga}}</p>
                             </div>
                         </div>
-                        {{-- @can('user')
-                        <div class="text-center">
+                        @can('user')
+                        {{-- <div class="text-center">
                             <input type="hidden" value="{{$item->id}}" class="product_id" >
                             <label for="quantity">Kuantitas</label>
                             <div id="tambahkurang" >
                                 <button class="btn btn-primary btn-sm decrement-btn" data-id="{{$item->id}}"> - </button>
-                                <input type="hidden" data-id="{{$item->id}}" class="product_qty">
                                 <input type="text" name="qty" class="text-center qty-input" value="1" style="width: 25px;" >
                                 <button class="btn btn-primary btn-sm increment-btn" data-id="{{$item->id}}"> + </button>
                             </div>
-                        </div><br>
+                        </div><br> --}}
                         <button type="button" class="btn btn-primary btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0 ml-2 btn-add-to-cart" >
                             <i data-feather="shopping-cart" class="mr-40"></i>
                             <span class="add-to-cart">Add to cart</span>
                         </button>
-                        @endcan --}}
+                        @endcan
                     </div>
                     @endforeach                    
                 </div>
@@ -94,157 +93,26 @@
 @endpush
 
 @push('scripts')
-    <script>
-        $(document).ready(function () {
-            $('.btn-add-to-cart').click(function () {
-                var prod_id = $(this).closest('.product_data').find('.product_id').val();
-                var prod_qty = $(this).closest('.product_data').find('.qty-input').val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{route('cart.store')}}",
-                    method: "POST",
-                    data: {
-                        'product_id' : prod_id,
-                        'qty' : prod_qty, 
-                        _token: '{{csrf_token()}}'
-                    }, success: function (response){
-                        alert(response.status);
-                    }
-                });
-
-                
-            });
-
-            // $('#tambahkurang').on('click', '.decrement-btn', function () {
-            $('.decrement-btn').click(function () {
-                // var id = $(this).data('id');
-                // var kuantitas = parseInt($(this).data('qty'))-1;
-                // $.ajax({
-                //     url: "{{url('cart')}}/" + id,
-                //     type: "POST",
-                //     data: {
-                //         'qty': kuantitas,
-                //         _token: '{{csrf_token()}}',
-                //         _method: 'PUT'
-                //     }
-                // });
-                var dec_value = $('.qty-input').val();
-                var value = parseInt(dec_value, 10);
-                value = isNaN(value) ? 0 : value;
-                if (value > 1) {
-                    value--;
-                    $('.qty-input').val(value);
-                } else {
-                    
-                }
-            });
-
-            // $('#tambahkurang').on('click', '.increment-btn', function () {
-            $('.increment-btn').click(function () {
-                // var id = $(this).data('id');
-                // var kuantitas = parseInt($(this).data('qty'))+1;
-                // $.ajax({
-                //     url: "{{url('cart')}}/" + id,
-                //     type: "POST",
-                //     data: {
-                //         'qty': kuantitas,
-                //         _token: '{{csrf_token()}}',
-                //         _method: 'PUT'
-                //     }
-                // });
-                var inc_value = $('.qty-input').val();
-                var value = parseInt(inc_value, 10);
-                value = isNaN(value) ? 0 : value;
-                if (value < 10) {
-                    value++;
-                    $('.qty-input').val(value);
-                } else {
-                    
-                }
-            });
-
-            $('#cart-items').on('click', '.cart-item-remove', function () {
-                var id = $(this).data('id');
-                $.ajax({
-                    url: "{{url('cart-session')}}/"+id,
-                    type: "POST",
-                    data: {
-                        _token: '{{csrf_token()}}',
-                        _method: 'DELETE'
-                    },
-                    success: function (data) {
-                        $('#cart-count').html(data.data.cart_item_count);
-                        $('#cart-count-label').html(data.data.cart_item_count+" Items");
-                        $('#cart-total').html(data.data.cart_total);
-                        $('#cart-items').html(data.data.cart_items);
-                        if (feather) {
-                            feather.replace({
-                                width: 14,
-                                height: 14
-                            });
-                        }
-                        toastr.success('Data berhasil dihapus!', 'Berhasil!', {
-                            closeButton: true,
-                            tapToDismiss: false
-                        });
-                    },
-                    error: function (data) {
-                        toastr.error('Terjadi kesalahan!', 'Gagal!', {
-                            closeButton: true,
-                            tapToDismiss: false
-                        });
-                    }
-                });
-            });
-
-            $(document).on('click', '.btn-del', function () {
-                var id = $(this).data('id');
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    type: 'error',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                })
-                    .then((result) => {
-                        if (result.value) {
-                            $.ajax({
-                                'url': '{{url('produk')}}/' + id,
-                                'type': 'post',
-                                'data': {
-                                    '_method': 'DELETE',
-                                    '_token': '{{csrf_token()}}'
-                                },
-                                success: function (response) {
-                                    if (response == 1) {
-                                        toastr.error('Data gagal dihapus!', 'Gagal!', {
-                                            closeButton: true,
-                                            tapToDismiss: false
-                                        });
-                                    } else {
-                                        toastr.success('Data berhasil dihapus!', 'Berhasil!', {
-                                            closeButton: true,
-                                            tapToDismiss: false
-                                        });
-                                        location.reload();
-                                    }
-                                }
-                            });
-                        } else {
-                            console.log(`dialog was dismissed by ${result.dismiss}`)
-                        }
-
-                    });
-            });
-
+<script>
+$(document).ready(function () {
+    $('.btn-add-to-cart').click(function () {
+        var prod_id = $('.product_id').val();
+        console.log(prod_id);
+        var prod_qty = $('.qty-input').val();
+        console.log(prod_qty);
+        $.ajax({
+            url: "{{route('cart.store')}}",
+            method: "POST",
+            data: {
+                'product_id' : prod_id,
+                'qty' : prod_qty, 
+                _token: '{{csrf_token()}}'
+            }, success: function (response){
+                console.log(response);
+            }
         });
-    </script>
+    });
+});
+</script>
 @endpush
 

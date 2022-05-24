@@ -33,7 +33,7 @@
                     <ul class="search-list search-list-main"></ul>
                 </div>
             </li>
-            <li class="nav-item dropdown dropdown-cart mr-25"><a class="nav-link" href="{{route('cart.index')}}" data-toggle="dropdown"><i class="ficon" data-feather="shopping-cart"></i><span class="badge badge-pill badge-primary badge-up cart-item-count">6</span></a>
+            <li class="nav-item dropdown dropdown-cart mr-25"><a class="nav-link" href="{{route('transaksi.index')}}" data-toggle="dropdown"><i class="ficon" data-feather="shopping-cart"></i><span class="badge badge-pill badge-primary badge-up cart-item-count">6</span></a>
                 <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                     <li class="dropdown-menu-header">
                         <div class="dropdown-header d-flex">
@@ -42,7 +42,7 @@
                         </div>
                     </li>
                     <li class="scrollable-container media-list" id="cart-items">
-                        @include('cart.cart_items')
+                        @include('transaksi.index')
                     </li>
                     <li class="dropdown-menu-footer">
                         <div class="d-flex justify-content-between mb-1">
