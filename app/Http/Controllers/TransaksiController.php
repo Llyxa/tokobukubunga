@@ -12,14 +12,15 @@ class TransaksiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $itemuser = $request->user();//ambil data user
-        $itemcart = Transaction::where('user_id', $itemuser->id)
-                        ->where('status_cart', 'carts')
-                        ->first();
+        $itemtransaksi = Transaction::where('user_id', $itemuser->id)
+        ->where('status_cart', 'transactions')
+        ->first();
+        // dd($itemtransaksi);
         $data = array('title' => 'Shopping Cart',
-                    'itemcart' => $itemcart);
+                    'itemtransaksi' => $itemtransaksi);
         return view('transaksi.index', $data)->with('no', 1);
     }
 
@@ -86,13 +87,10 @@ class TransaksiController extends Controller
      */
     public function destroy($id)
     {
-        $itemuser = $request->user();//ambil data user
-        $itemcart = Transaction::where('user_id', $itemuser->id)
-                        ->where('status_cart', 'cart')
-                        ->first();
-        $data = array('title' => 'Shopping Cart',
-                    'itemcart' => $itemcart);
-        return view('transaksi.index', $data)->with('no', 1);
+        $itemtransaksi = Transaction::findOrFail($id);
+        $itemtransaksi->detail()->delete();//hapus semua item di cart detail
+        $itemtransaksi->updatetotal($itemtransaksi, '-'.$itemtransaksi->subtotal);
+        return back()->with('success', 'Cart berhasil dikosongkan');
 
     }
 

@@ -25,12 +25,12 @@ Illuminate\Support\Facades\Auth::routes();
     // Route::get('/checkout/{id}', [ProdukController::class, 'checkout'])->name('checkout');
     // Route::get('/keranjang', 'ProdukController@checkout');
     // Route::resource('detail-transaksi', \App\Http\Controllers\DetailTransaksiController::class);
-    Route::resource('cart', \App\Http\Controllers\CartController::class);
-    Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
+    // Route::resource('cart', \App\Http\Controllers\CartController::class);
+    Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
 
     Route::middleware('admin')->group(function () {
         Route::resource('kategori', \App\Http\Controllers\KategoriController::class)->except('show');

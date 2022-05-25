@@ -88,17 +88,17 @@
                             <div id="place-order" class="list-view product-checkout">
                                 <!-- Checkout Place Order Left starts -->
                                 <div class="checkout-items">
-                                    @foreach ($cart_items as $item)
+                                    @foreach ($itemtransaksi->cart as $cart)
                                     <div class="card ecommerce-card">
                                         <div class="item-img">
                                             <a href="app-ecommerce-details.html">
-                                                <img src="{{ asset ('storage/foto/'. $item->$product->image) }}" alt="img-placeholder" />
+                                                <img src="{{ asset ('storage/foto/'. $cart->$product->image) }}" alt="img-placeholder" />
                                             </a>
                                         </div>
                                         <div class="card-body">
                                             <div class="item-name">
-                                                <h6 class="mb-0"><a href="app-ecommerce-details.html" class="text-body">{{$item->$product->judul}}</a></h6>
-                                                <span class="item-company">Written By <a href="javascript:void(0)" class="company-name">{{$item->$product->penulis}}</a></span>
+                                                <h6 class="mb-0"><a href="app-ecommerce-details.html" class="text-body">{{$cart->$product->judul}}</a></h6>
+                                                <span class="item-company">Written By <a href="javascript:void(0)" class="company-name">{{$cart->$product->penulis}}</a></span>
                                                 <div class="item-rating">
                                                     <ul class="unstyled-list list-inline">
                                                         <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
@@ -109,12 +109,12 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            @if ($item->$product->stok > 0)
-                                                <p class="card-text">Available - <span class="text-success">{{$item->$product->stok}}</span></p>
+                                            @if ($cart->$product->stok > 0)
+                                                <p class="card-text">Available - <span class="text-success">{{$cart->$product->stok}}</span></p>
                                             @else
                                                 <p class="card-text">Not Available
                                             @endif
-                                            <h4 class="item-price">Rp. {{number_format($item->$product->harga)}}</h4>
+                                            <h4 class="item-price">Rp. {{number_format($cart->$product->harga)}}</h4>
                                             {{-- <span class="text-success mb-1">In Stock </span> --}}
                                             <div class="item-quantity">
                                                 {{-- <input type="hidden" value="{{$product->id}}" class="product_id" > --}}

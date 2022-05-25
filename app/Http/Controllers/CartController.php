@@ -46,12 +46,11 @@ class CartController extends Controller
         $itemuser = $request->user();
         $itemproduk = Product::findOrFail($request->product_id);
         // cek dulu apakah sudah ada shopping cart untuk user yang sedang login
-        $cart = Transaction::where('user_id', $itemuser->id)
+        $transaksi = Transaction::where('user_id', $itemuser->id)
                     ->where('status_cart', 'transactions')
                     ->first();
-        
-        if ($cart) {
-            $itemcart = $cart;
+        if ($transaksi) {
+            $itemtransaksi = $transaksi;
         } else {
             $no_invoice = Transaction::where('user_id', $itemuser->id)->count();
             //nyari jumlah cart berdasarkan user yang sedang login untuk dibuat no invoice
@@ -60,10 +59,10 @@ class CartController extends Controller
             $inputancart['status_cart'] = 'cart';
             $inputancart['status_pembayaran'] = 'belum';
             $inputancart['status_pengiriman'] = 'belum';
-            $itemcart = Transaction::create($inputancart);
+            $itemtransaksi = Transaction::create($inputancart);
         }
         // cek dulu apakah sudah ada produk di shopping cart
-        $cekdetail = Cart::where('transaction_id', $itemcart->id)
+        $cekdetail = Transaction::where('transaction_id', $itemtransaksi->id)
                                 ->where('product_id', $itemproduk->id)
                                 ->first();
         $qty = 1;// diisi 1, karena kita set ordernya 1
@@ -75,20 +74,20 @@ class CartController extends Controller
             // update detail di table cart_detail
             $cekdetail->updatedetail($cekdetail, $qty, $harga, $diskon);
             // update subtotal dan total di table cart
-            $cekdetail->cart->updatetotal($cekdetail->cart, $subtotal);
+            $cekdetail->transaction->updatetotal($cekdetail->transaction, $subtotal);
         } else {
             $inputan = $request->all();
-            $inputan['transaction_id'] = $itemcart->id;
-            $inputan['produk_id'] = $itemproduk->id;
+            $inputan['transaction_id'] = $itemtransaksi->id;
+            $inputan['product_id'] = $itemproduk->id;
             $inputan['qty'] = $qty;
             $inputan['harga'] = $harga;
             $inputan['diskon'] = $diskon;
             $inputan['subtotal'] = ($harga * $qty) - $diskon;
-            $itemdetail = CartDetail::create($inputan);
+            $itemdetail = Cart::create($inputan);
             // update subtotal dan total di table cart
             $itemdetail->transaction->updatetotal($itemdetail->transaction, $subtotal);
         }
-        return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke cart');
+        return redirect()->route('transaksi.index')->with('success', 'Produk berhasil ditambahkan ke cart');
         // $request->validate([
         //     'product_id' => 'required',
         //     'user_id' => 'required',

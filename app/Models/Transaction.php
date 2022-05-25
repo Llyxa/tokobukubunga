@@ -32,9 +32,9 @@ class Transaction extends Model
         return $this->hasMany('App\Cart', 'transaction_id');
     }
 
-    public function updatetotal($itemcart, $subtotal) {
-        $this->attributes['subtotal'] = $itemcart->subtotal + $subtotal;
-        $this->attributes['total'] = $itemcart->total + $subtotal;
+    public function updatetotal($itemtransaksi, $subtotal) {
+        $this->attributes['subtotal'] = $itemtransaksi->subtotal + $subtotal;
+        $this->attributes['total'] = $itemtransaksi->total + $subtotal;
         self::save();
     }
     // public function product(){
