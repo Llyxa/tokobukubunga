@@ -66,19 +66,35 @@
                             </div>
                         </div>
                         @can('user')
-                        {{-- <div class="text-center">
-                            <input type="hidden" value="{{$item->id}}" class="product_id" >
-                            <label for="quantity">Kuantitas</label>
-                            <div id="tambahkurang" >
-                                <button class="btn btn-primary btn-sm decrement-btn" data-id="{{$item->id}}"> - </button>
-                                <input type="text" name="qty" class="text-center qty-input" value="1" style="width: 25px;" >
-                                <button class="btn btn-primary btn-sm increment-btn" data-id="{{$item->id}}"> + </button>
-                            </div>
-                        </div><br> --}}
-                        <button type="button" class="btn btn-primary btn-cart mr-0 mr-sm-1 mb-1 mb-sm-0 ml-2 btn-add-to-cart" >
-                            <i data-feather="shopping-cart" class="mr-40"></i>
-                            <span class="add-to-cart">Add to cart</span>
-                        </button>
+                        <div class="text-center">
+                            {{-- @php
+                                $url =  $_SERVER["REQUEST_URI"];
+                                $url = collect(str_split($url));
+                                $url = $url->splice(9)->implode('');
+                            @endphp --}}
+                            {{-- <input type="hidden" class="product_id" value="{{$item->id}}" name="product_id" >{{$item->id}}
+                            <input type="hidden" name="product_id" value="{{ $url }}" class="product_id">
+                            <input type="hidden" name="user_id" value="{{ @ Auth::user()->id }}" class="user_id">
+                            <button type="button" class="btn btn-primary btn-cart btn-add-to-cart" >
+                                <i data-feather="shopping-cart" class="mr-40"></i>
+                                <span class="add-to-cart">Add to cart</span>
+                            </button> --}}
+                            <form action="{{ route('cart.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value={{$item->id}}>
+                                <button class="btn btn-block btn-primary" type="submit">
+                                    <i data-feather="shopping-cart" class="mr-40"></i>
+                                    <span class="add-to-cart">Add to cart</span>
+                                </button>
+                            </form>
+                            {{-- <form action="{{ route('cartdetail.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="produk_id" value={{$itemproduk->id}}>
+                                <button class="btn btn-block btn-primary" type="submit">
+                                <i class="fa fa-shopping-cart"></i> Tambahkan Ke Keranjang
+                                </button>
+                            </form> --}}
+                        </div>
                         @endcan
                     </div>
                     @endforeach                    
@@ -94,25 +110,6 @@
 
 @push('scripts')
 <script>
-$(document).ready(function () {
-    $('.btn-add-to-cart').click(function () {
-        var prod_id = $('.product_id').val();
-        console.log(prod_id);
-        var prod_qty = $('.qty-input').val();
-        console.log(prod_qty);
-        $.ajax({
-            url: "{{route('cart.store')}}",
-            method: "POST",
-            data: {
-                'product_id' : prod_id,
-                'qty' : prod_qty, 
-                _token: '{{csrf_token()}}'
-            }, success: function (response){
-                console.log(response);
-            }
-        });
-    });
-});
 </script>
 @endpush
 

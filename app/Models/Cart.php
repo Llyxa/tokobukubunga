@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Product;
+use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,16 +34,17 @@ class Cart extends Model
 
     protected $table = 'carts';
     protected $fillable = [
+        'user_id',
         'product_id',
         'transaction_id',
         'qty',
-        'harga',
+        // 'harga',
         'diskon',
         'subtotal',
     ];
 
     public function transaction() {
-        return $this->belongsTo('App\Transaction', 'transaction');
+        return $this->belongsTo(Transaction::class, 'transaction_id');
     }
 
     public function produk() {
@@ -50,10 +52,12 @@ class Cart extends Model
     }
 
     // function untuk update qty, sama subtotal
-    public function updatedetail($itemdetail, $qty, $harga, $diskon) {
+    public function updatedetail($itemdetail, $qty, $harga) {
         $this->attributes['qty'] = $itemdetail->qty + $qty;
-        $this->attributes['subtotal'] = $itemdetail->subtotal + ($qty * ($harga - $diskon));
+        $this->attributes['subtotal'] = $itemdetail->subtotal + ($qty * $harga);
         self::save();
     }
+
+    
 
 }

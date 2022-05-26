@@ -17,9 +17,9 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        // $cart_items = Cart::where('user_id', Auth::id())->get();
-        // return view('cart.index', compact('cart_items'));
         return abort('404');
+        // $data['carts'] = Cart::all();
+        // return view('admin.produk.index', $data);
     }
 
     /**
@@ -41,115 +41,77 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            // 'user_id' => 'required',
             'product_id' => 'required',
         ]);
-        $itemuser = $request->user();
+        $itemuser = Auth::user()->id;
         $itemproduk = Product::findOrFail($request->product_id);
-        // cek dulu apakah sudah ada shopping cart untuk user yang sedang login
-        $transaksi = Transaction::where('user_id', $itemuser->id)
-                    ->where('status_cart', 'transactions')
-                    ->first();
-        if ($transaksi) {
-            $itemtransaksi = $transaksi;
+        // $carts = Cart::where('user_id', Auth::user()->id);
+
+        $cart = Transaction::where('user_id', $itemuser)
+        ->where('status_cart', 'cart')
+        ->first();
+
+        if ($cart) {
+            $itemtransaksi = $cart;
         } else {
-            $no_invoice = Transaction::where('user_id', $itemuser->id)->count();
+            $no_invoice = Transaction::where('user_id', $itemuser)->count();
             //nyari jumlah cart berdasarkan user yang sedang login untuk dibuat no invoice
-            $inputancart['user_id'] = $itemuser->id;
+            $inputancart['user_id'] = $itemuser;
             $inputancart['no_invoice'] = 'INV '.str_pad(($no_invoice + 1),'3', '0', STR_PAD_LEFT);
             $inputancart['status_cart'] = 'cart';
             $inputancart['status_pembayaran'] = 'belum';
             $inputancart['status_pengiriman'] = 'belum';
             $itemtransaksi = Transaction::create($inputancart);
         }
-        // cek dulu apakah sudah ada produk di shopping cart
-        $cekdetail = Transaction::where('transaction_id', $itemtransaksi->id)
+
+        $cekdetail = Cart::where('transaction_id', $itemtransaksi->id)
                                 ->where('product_id', $itemproduk->id)
                                 ->first();
-        $qty = 1;// diisi 1, karena kita set ordernya 1
-        $harga = $itemproduk->harga;//ambil harga produk
-        $diskon = $itemproduk->promo != null ? $itemproduk->promo->diskon_nominal: 0;
-        $subtotal = ($qty * $harga) - $diskon;
-        // diskon diambil kalo produk itu ada promo, cek materi sebelumnya
-        if ($cekdetail) {
+
+        // $cekdetail = Cart::where('user_id', $itemuser)
+        //                         ->where('product_id', $itemproduk->id)
+        //                         ->first();
+        $harga = $itemproduk->harga;
+        $qty = 1; // qty diupdate di cart list
+        $subtotal = ($qty * $harga);
+
+        if ($cekdetail){
             // update detail di table cart_detail
-            $cekdetail->updatedetail($cekdetail, $qty, $harga, $diskon);
+            $cekdetail->updatedetail($cekdetail, $qty, $harga);
             // update subtotal dan total di table cart
             $cekdetail->transaction->updatetotal($cekdetail->transaction, $subtotal);
         } else {
-            $inputan = $request->all();
-            $inputan['transaction_id'] = $itemtransaksi->id;
-            $inputan['product_id'] = $itemproduk->id;
-            $inputan['qty'] = $qty;
-            $inputan['harga'] = $harga;
-            $inputan['diskon'] = $diskon;
-            $inputan['subtotal'] = ($harga * $qty) - $diskon;
-            $itemdetail = Cart::create($inputan);
-            // update subtotal dan total di table cart
-            $itemdetail->transaction->updatetotal($itemdetail->transaction, $subtotal);
+            Cart::create([
+            'transaction_id' => 0,
+            'user_id' => $itemuser,
+            'product_id' => $itemproduk->id,
+            'qty' => $qty,
+            // 'harga' => $harga,
+            'subtotal' => $subtotal
+            ]);
         }
-        return redirect()->route('transaksi.index')->with('success', 'Produk berhasil ditambahkan ke cart');
-        // $request->validate([
-        //     'product_id' => 'required',
-        //     'user_id' => 'required',
-        //     'qty' => 'required',
-        //     'subtotal' => 'required'
-        // ]);
 
-        // $product = Product::id();
-        // $user = Auth::id();
-
-        // $produk = Product::create([
-        //     'product_id' => $product,
-        //     'user_id' => $user,
-        //     'qty' => $request['qty'],
-        //     'subtotal' => $request['subtotal']
-        // ]);
-
-        // $produk =  url()->previous();
-        // $produk = collect(str_split($produk));
-        // $produk = $produk->splice(26)->implode('');
-        // $validatedData = $request->validate([
-        //     'product_id' => 'required',
-        //     'user_id' => 'required',
-        //     'qty' => 'required',
-        //     'subtotal' => 'required'
-        // ]);
-        
-        // $carts = Cart::all()->where('product_id', '==', $produk)
-        //                     ->where('user_id', '==', Auth::user()->id)
-        //                     ->first();
+        // public function updatedetail($itemdetail, $qty, $harga) {
+        //     $this->attributes['qty'] = $itemdetail->qty + $qty;
+        //     $this->attributes['subtotal'] = $itemdetail->subtotal + ($qty * $harga);
+        //     self::save();
+        // }
 
         // if ($carts) {
-        //     $resultQty = $carts->qty += $validatedData['qty'];
-        //     $resultPriceTotal = $carts->subtotal += $validatedData['subtotal'];
-        //     $tes = $cart->where('id', $carts->id)->update([
-        //         'qty' => $resultQty,
-        //         'subtotal' => $resultPriceTotal
-        //     ]);
-        //     return redirect(route('product.detail'))->with('success', 'Success Add to Cart');
+        //     $carts->updatedetail($carts, $qty, $harga, $subtotal);
         // } else {
-        //     Cart::create($validatedData);
-        //     return redirect(route('product.detail'))->with('success', 'Success Added a Product to Cart');
+            // $inputan = $request->all();
+            // $inputan['user_id'] = $itemuser;
+            // $inputan['product_id'] = $itemproduk->id;
+            // $inputan['qty'] = $qty;
+            // $inputan['harga'] = $harga;
+            // $inputan['subtotal'] = ($harga * $qty);
+            // $itemdetail = Cart::create($inputan);
         // }
 
-        // dd($request);
-        // $produk = $request->input('id');
-        // $kuantitas = $request->input('qty');
-        // $prod_check = Product::where('id', $produk)->first();
-        
-        // if ($prod_check) {
-        //     $cart_item = new Cart();
-        //     $cart_item->product_id = $produk;
-        //     $cart_item->user_id = Auth::id();
-        //     $cart_item->qty = $kuantitas;
-        //     $cart_item->save;
-
-        //     return response()->json(['status' => $prod_check->judul. " added to cart"]);
-        // } 
-        // else 
-        // {
-        //     return response()->json(['status' => "Cannot added to cart"]);
-        // }
+        return redirect()->route('produk.index'); // ->with('success', 'Data berhasil ditambahkan');
+        // return view('admin.produk.index')->with('success', 'Produk berhasil ditambahkan ke cart');
     }   
 
     /**
@@ -189,7 +151,7 @@ class CartController extends Controller
         if ($param == 'tambah') {
             // update detail cart
             $qty = 1;
-            $itemdetail->updatedetail($itemdetail, $qty, $itemdetail->harga, $itemdetail->diskon);
+            $itemdetail->updatedetail($itemdetail, $qty, $itemdetail->harga);
             // update total cart
             $itemdetail->transaction->updatetotal($itemdetail->transaction, ($itemdetail->harga - $itemdetail->diskon));
             return back()->with('success', 'Item berhasil diupdate');

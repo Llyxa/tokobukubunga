@@ -53,7 +53,8 @@
                                         <span class="card-text item-company">Written by <a href="javascript:void(0)" class="company-name">{{$product->penulis}}</a></span>
                                         
                                         <div class="ecommerce-details-price d-flex flex-wrap mt-1"> 
-                                            <h4>Rp. {{number_format($product->harga)}} </h4><h4 class="item-price mr-1" id="harga" name="harga" value="{{$product->harga}}" disabled="" onkeyup="OnChange(this.value)" onKeyPress="return isNumberKey(event)"></h4>
+                                            <h4 class="harga" value="{{$product->harga}}">Rp. {{number_format($product->harga)}} </h4>
+                                            {{-- <h4 class="item-price mr-1 harga" id="harga" name="harga" value="{{$product->harga}}" disabled="" ></h4> --}}
                                             <ul class="unstyled-list list-inline pl-1 border-left">
                                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
                                                 <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
@@ -135,7 +136,6 @@
                                             <div class="item-quantity">
                                                     {{-- @can('user') --}}
                                                     <div class="">
-                                                        <input type="hidden" value="{{$product->id}}" class="product_id" >
                                                         {{-- <label for="quantity">Kuantitas</label> --}}
                                                         <div id="tambahkurang" >
                                                             <button class="btn btn-primary btn-sm decrement-btn" > - </button>
@@ -154,7 +154,7 @@
                                         </div>
                                     </div><hr />
                                     {{-- <div class="transaction-items">
-                                        <div class="media">
+                                        <div class="media">user
                                             <div class="media-body">
                                                 <h2>Subtotal: </h2>
                                                 <input type="text" name="total_harga" value="" disabled="" >
@@ -164,6 +164,16 @@
                                     <div class="transaction-item">
                                         <div class="media">
                                             <div class="media-body">
+                                                {{-- @php
+                                                $url =  $_SERVER["REQUEST_URI"];
+                                                $url = collect(str_split($url));
+                                                $url = $url->splice(9)->implode('');
+                                            @endphp
+
+                                            <input type="hidden" name="product_id" value="{{ $url }}"> --}}
+                                            <input type="hidden" value="{{$product->id}}" class="product_id" >
+                                            <input type="hidden" name="user_id" value="{{ @ Auth::user()->id }}" class="user_id">
+
                                                 <button type="button" class="btn btn-primary btn-cart btn-add-to-cart" >
                                                     <i data-feather="shopping-cart" class="mr-40"></i>
                                                     <span class="add-to-cart">Add to cart</span>
@@ -353,14 +363,17 @@
         $('.btn-add-to-cart').click(function () {
         var prod_id = $('.product_id').val();
         console.log(prod_id);
-        var prod_qty = $('.qty-input').val();
-        console.log(prod_qty);
+        var user_id = $('.user_id').val();
+        console.log(user_id);
+        // var qty_input = $('.qty_input').val();
+        // console.log(qty_input);
         $.ajax({
             url: "{{route('cart.store')}}",
             method: "POST",
             data: {
                 'product_id' : prod_id,
-                'qty' : prod_qty, 
+                'user_id' : user_id,
+                'qty' : qty_input,
                 _token: '{{csrf_token()}}'
             }, success: function (response){
                 console.log(response);

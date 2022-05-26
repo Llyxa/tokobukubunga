@@ -33,16 +33,32 @@
                     <ul class="search-list search-list-main"></ul>
                 </div>
             </li>
-            <li class="nav-item dropdown dropdown-cart mr-25"><a class="nav-link" href="{{route('transaksi.index')}}" data-toggle="dropdown"><i class="ficon" data-feather="shopping-cart"></i><span class="badge badge-pill badge-primary badge-up cart-item-count">6</span></a>
+            <li class="nav-item dropdown dropdown-cart mr-25"><a class="nav-link" href="" data-toggle="dropdown"><i class="ficon" data-feather="shopping-cart"></i><span class="badge badge-pill badge-primary badge-up cart-item-count">6</span></a>
                 <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                     <li class="dropdown-menu-header">
                         <div class="dropdown-header d-flex">
                             <h4 class="notification-title mb-0 mr-auto">My Cart</h4>
-                            <div class="badge badge-pill badge-light-primary" id="cart-count-label">{{session()->get('cart_count', 0)}} Items</div>
+                            <div class="badge badge-pill badge-light-primary" id="cart-count-label">0 Items</div>
                         </div>
                     </li>
                     <li class="scrollable-container media-list" id="cart-items">
-                        @include('transaksi.index')
+                    @foreach (@$carts as $cart)
+                    <div class="media align-items-center"><img class="d-block rounded mr-1" src="{{ asset('assets') }}/admin/images/pages/eCommerce/1.png" alt="donuts" width="62">
+                        <div class="media-body">
+                            <button type="button" class="ficon cart-item-remove border-0" id="cart-del" data-id="{{ $cart->id }}"></button>
+                            <i data-feather="x" class="ficon cart-item-remove"></i> 
+                            <div class="media-heading">
+                                <h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">{{ @$cart->product->judul }}</a></h6>
+                            </div>
+                            <div class="cart-item-qty">
+                                <div class="input-group">
+                                    <input class="touchspin-cart" id="qty" type="number" data-id="{{ $cart->id }}" value="{{ @$cart->qty }}">
+                                </div>
+                            </div>
+                            <h5 class="cart-item-price pricee" id="priceee">Rp. {{ @$cart->subtotal}}</h5>
+                        </div>
+                    </div>  
+                    @endforeach
                     </li>
                     <li class="dropdown-menu-footer">
                         <div class="d-flex justify-content-between mb-1">

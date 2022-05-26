@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiController extends Controller
 {
@@ -14,9 +15,9 @@ class TransaksiController extends Controller
      */
     public function index(Request $request)
     {
-        $itemuser = $request->user();//ambil data user
-        $itemtransaksi = Transaction::where('user_id', $itemuser->id)
-        ->where('status_cart', 'transactions')
+        $itemuser = Auth::user()->id;//ambil data user
+        $itemtransaksi = Transaction::where('user_id', $itemuser)
+        ->where('status_cart', 'transaction')
         ->first();
         // dd($itemtransaksi);
         $data = array('title' => 'Shopping Cart',
@@ -88,7 +89,7 @@ class TransaksiController extends Controller
     public function destroy($id)
     {
         $itemtransaksi = Transaction::findOrFail($id);
-        $itemtransaksi->detail()->delete();//hapus semua item di cart detail
+        $itemtransaksi->cart()->delete();//hapus semua item di cart
         $itemtransaksi->updatetotal($itemtransaksi, '-'.$itemtransaksi->subtotal);
         return back()->with('success', 'Cart berhasil dikosongkan');
 

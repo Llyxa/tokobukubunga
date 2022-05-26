@@ -92,13 +92,13 @@
                                     <div class="card ecommerce-card">
                                         <div class="item-img">
                                             <a href="app-ecommerce-details.html">
-                                                <img src="{{ asset ('storage/foto/'. $cart->$product->image) }}" alt="img-placeholder" />
+                                                <img src="{{ asset ('storage/foto/'. $cart->$produk->image) }}" alt="img-placeholder" />
                                             </a>
                                         </div>
                                         <div class="card-body">
                                             <div class="item-name">
-                                                <h6 class="mb-0"><a href="app-ecommerce-details.html" class="text-body">{{$cart->$product->judul}}</a></h6>
-                                                <span class="item-company">Written By <a href="javascript:void(0)" class="company-name">{{$cart->$product->penulis}}</a></span>
+                                                <h6 class="mb-0"><a href="app-ecommerce-details.html" class="text-body">{{$cart->$produk->judul}}</a></h6>
+                                                <span class="item-company">Written By <a href="javascript:void(0)" class="company-name">{{$cart->$produk->penulis}}</a></span>
                                                 <div class="item-rating">
                                                     <ul class="unstyled-list list-inline">
                                                         <li class="ratings-list-item"><i data-feather="star" class="filled-star"></i></li>
@@ -109,12 +109,12 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                            @if ($cart->$product->stok > 0)
-                                                <p class="card-text">Available - <span class="text-success">{{$cart->$product->stok}}</span></p>
+                                            @if ($cart->$produk->stok > 0)
+                                                <p class="card-text">Available - <span class="text-success">{{$cart->$produk->stok}}</span></p>
                                             @else
                                                 <p class="card-text">Not Available
                                             @endif
-                                            <h4 class="item-price">Rp. {{number_format($cart->$product->harga)}}</h4>
+                                            <h4 class="item-price">Rp. {{number_format($cart->$produk->harga)}}</h4>
                                             {{-- <span class="text-success mb-1">In Stock </span> --}}
                                             <div class="item-quantity">
                                                 {{-- <input type="hidden" value="{{$product->id}}" class="product_id" > --}}

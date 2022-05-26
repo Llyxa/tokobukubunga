@@ -25,12 +25,12 @@ return new class extends Migration
 
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('transaction_id');
+            $table->foreignId('user_id');
             $table->foreignId('product_id');
-            // $table->integer('produk_id')->unsigned();
+            $table->foreignId('transaction_id');
             // $table->integer('cart_id')->unsigned();
-            $table->double('qty', 12, 2)->default(0);
-            $table->double('harga', 12, 2)->default(0);
+            $table->integer('qty')->default(0);
+            // $table->double('harga', 12, 2)->default(0);
             $table->double('diskon', 12, 2)->default(0);
             $table->double('subtotal', 12, 2)->default(0);
             $table->timestamps();

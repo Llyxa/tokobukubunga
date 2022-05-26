@@ -29,7 +29,7 @@ Illuminate\Support\Facades\Auth::routes();
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('/');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
-    // Route::resource('cart', \App\Http\Controllers\CartController::class);
+    Route::resource('cart', \App\Http\Controllers\CartController::class);
     Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
 
     Route::middleware('admin')->group(function () {
@@ -44,17 +44,15 @@ Illuminate\Support\Facades\Auth::routes();
     //     Route::resource('transaksi', \App\Http\Controllers\TransaksiController::class);
     //     // cart
     //     Route::resource('cart', \App\Http\Controllers\CartController::class);
-    //     Route::patch('kosongkan/{id}', [App\Http\Controllers\CartController::class, 'kosongkan']);
-    //     // cart detail
-    //     Route::resource('cartdetail', \App\Http\Controllers\CartDetailController::class);
+    //     Route::patch('kosongkan/{id}', [App\Http\Controllers\CartController::class, 'kosongkan']);\
     // });
 
 // Route::group(['middleware' => 'auth'], function() {
     // cart
     // Route::resource('cart', \App\Http\Controllers\CartController::class);
-    Route::patch('kosongkan/{id}', [App\Http\Controllers\CartController::class, 'kosongkan']);
+    // Route::patch('kosongkan/{id}', [App\Http\Controllers\CartController::class, 'kosongkan']);
     // cart detail
-    Route::resource('cartdetail', \App\Http\Controllers\CartDetailController::class);
+    // Route::resource('cartdetail', \App\Http\Controllers\CartDetailController::class);
 //   });
 
     
