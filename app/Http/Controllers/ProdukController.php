@@ -12,6 +12,7 @@ use App\Models\Publisher;
 use App\Models\GenreProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ProdukController extends Controller
 {
@@ -28,6 +29,8 @@ class ProdukController extends Controller
     public function index()
     {
         $data['produk'] = Product::all();
+        $data['keranjang'] = Cart::where('user_id', '=', Auth::user()->id)->get();
+        $data['total'] = Total::total();
         // 'total' => Total::total(),
         return view('admin.produk.index', $data);
         // return view('admin.produk.index', [

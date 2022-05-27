@@ -33,17 +33,27 @@
                     <ul class="search-list search-list-main"></ul>
                 </div>
             </li>
+            @can('user')
             <li class="nav-item dropdown dropdown-cart mr-25"><a class="nav-link" href="" data-toggle="dropdown"><i class="ficon" data-feather="shopping-cart"></i><span class="badge badge-pill badge-primary badge-up cart-item-count">6</span></a>
+                @if (@$keranjang->count() == null)
+                <span class="badge badge-pill badge-primary badge-up cart-item-count">0</span></a>
+                @else
+                <span class="badge badge-pill badge-primary badge-up cart-item-count">{{ @$keranjang->count() }}</span></a>
+                @endif
                 <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                     <li class="dropdown-menu-header">
                         <div class="dropdown-header d-flex">
                             <h4 class="notification-title mb-0 mr-auto">My Cart</h4>
-                            <div class="badge badge-pill badge-light-primary" id="cart-count-label">0 Items</div>
+                            @if (@$keranjang->count() == null)
+                            <div class="badge badge-pill badge-light-primary">0 Items</div>
+                            @else
+                            <div class="badge badge-pill badge-light-primary">{{ @$keranjang->count() }} Items</div>
+                            @endif
                         </div>
                     </li>
                     <li class="scrollable-container media-list" id="cart-items">
-                    @foreach (@$carts as $cart)
-                    <div class="media align-items-center"><img class="d-block rounded mr-1" src="{{ asset('assets') }}/admin/images/pages/eCommerce/1.png" alt="donuts" width="62">
+                    {{-- @foreach (@$keranjang as $cart)
+                    <div class="media align-items-center"><img class="d-block rounded mr-1" src="{{ asset ('storage/foto/'. @$cart->product->image) }}" width="62">
                         <div class="media-body">
                             <button type="button" class="ficon cart-item-remove border-0" id="cart-del" data-id="{{ $cart->id }}"></button>
                             <i data-feather="x" class="ficon cart-item-remove"></i> 
@@ -58,17 +68,50 @@
                             <h5 class="cart-item-price pricee" id="priceee">Rp. {{ @$cart->subtotal}}</h5>
                         </div>
                     </div>  
-                    @endforeach
-                    </li>
-                    <li class="dropdown-menu-footer">
-                        <div class="d-flex justify-content-between mb-1">
-                            <h6 class="font-weight-bolder mb-0">Total:</h6>
-                            <h6 class="text-primary font-weight-bolder mb-0" id="cart-total">Rp {{ number_format(session()->get('cart_total', 0)) }}</h6>
-                        </div><a class="btn btn-primary btn-block" href="app-ecommerce-checkout.html">Checkout</a>
-                    </li>
+                    @endforeach --}}
+                    @if (@$keranjang && !@$keranjang->isEmpty())
+                        @foreach ($keranjang as $cart)
+                        <div class="media align-items-center"><img class="d-block rounded mr-1" src="{{ asset ('storage/foto/'. $cart->produk->image) }}" width="40">
+                            <div class="media-body">
+                                <button type="button" class="ficon cart-item-remove border-0" id="cart-del" data-id="{{ $cart->id }}"></button>
+                                <i data-feather="x" class="ficon cart-item-remove"></i> 
+                                <div class="media-heading">
+                                    <h6 class="cart-item-title .h6"><a class="text-body" href="app-ecommerce-details.html">{{ $cart->produk->judul }}</a></h6>
+                                </div>
+                                <div class="cart-item-qty">
+                                    <div class="input-group">
+                                        <input class="touchspin-cart" id="quantity" data-id="{{ $cart->id }}" type="number" value="{{ $cart->qty }}">
+                                    </div>
+                                </div>
+                                <h6 class="cart-item-price font-weight-1 price-item" id="price-item">Rp. {{ number_format($cart->subtotal) }}</h6>
+                            </div>
+                        </div>
+                        <input type="hidden" id="price" value="{{ $cart->produk->harga }}">
+                        @endforeach
+                    @else 
+                        <div class="media align-items-center">
+                            <div class="media-body d-flex justify-content-center">
+                                <p class="text-danger">Cart is empty</p>
+                            </div>
+                        </div>
+                    @endif
+                    
+                </li>
+                @if (@$keranjang && @!$keranjang->isEmpty())
+                <li class="dropdown-menu-footer">
+                    <div class="d-flex justify-content-between mb-1">
+                        <h6 class="font-weight-bolder mb-0">Total: </h6>
+                        <h6 class="text-primary font-weight-bolder mb-0" id="total">Rp. {{ number_format($total) }}</h6>
+                        {{-- <h6 class="text-primary font-weight-bolder mb-0" id="total">Rp. $total</h6> --}}
+                    </div><a class="btn btn-primary btn-block" href="app-ecommerce-checkout.html">Checkout</a>
+                </li>
+                    
+                @endif
+
 
                 </ul>
             </li>
+            @endcan
             <li class="nav-item dropdown dropdown-notification mr-25"><a class="nav-link" href="javascript:void(0);" data-toggle="dropdown"><i class="ficon" data-feather="bell"></i><span class="badge badge-pill badge-danger badge-up">5</span></a>
                 <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                     <li class="dropdown-menu-header">

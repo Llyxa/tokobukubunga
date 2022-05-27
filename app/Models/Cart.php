@@ -48,7 +48,7 @@ class Cart extends Model
     }
 
     public function produk() {
-        return $this->belongsTo('App\Product', 'product_id');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     // function untuk update qty, sama subtotal

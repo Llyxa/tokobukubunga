@@ -36,6 +36,6 @@
                 </div>
             @endif
 
-            <h2>Selamat Datang di Toko Buku Bunga</h2>
+            <h2>Selamat Datang di Website Toko Buku</h2>
     </body>
 </html>

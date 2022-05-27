@@ -365,46 +365,46 @@
         console.log(prod_id);
         var user_id = $('.user_id').val();
         console.log(user_id);
-        // var qty_input = $('.qty_input').val();
-        // console.log(qty_input);
-        $.ajax({
-            url: "{{route('cart.store')}}",
-            method: "POST",
-            data: {
-                'product_id' : prod_id,
-                'user_id' : user_id,
-                'qty' : qty_input,
-                _token: '{{csrf_token()}}'
-            }, success: function (response){
-                console.log(response);
+        var qty_input = $('.qty-input').val();
+        console.log(qty_input);
+            $.ajax({
+                url: "{{route('cart.store')}}",
+                method: "POST",
+                data: {
+                    'product_id' : prod_id,
+                    'user_id' : user_id,
+                    'qty' : qty_input,
+                    _token: '{{csrf_token()}}'
+                }, success: function (response){
+                    console.log(response);
+                }
+            });
+        });
+        $('.decrement-btn').click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var dec_value = $('.qty-input').val();
+            var value = Number(dec_value, 1000);
+            value = isNaN(value) ? 0 : value;
+            if (value > 1) {
+                value--;
+                $('.qty-input').val(value);
+            } 
+            
+        });
+
+        $('.increment-btn').click(function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            
+            var inc_value = $('.qty-input').val();
+            var value = Number(inc_value, 1000);
+            value = isNaN(value) ? 0 : value;
+            if (value < 1000) {
+                value++;
+                $('.qty-input').val(value);
             }
         });
-    });
-    $('.decrement-btn').click(function (e) {
-        e.preventDefault();
-        var id = $(this).data('id');
-        var dec_value = $('.qty-input').val();
-        var value = Number(dec_value, 1000);
-        value = isNaN(value) ? 0 : value;
-        if (value > 1) {
-            value--;
-            $('.qty-input').val(value);
-        } 
-        
-    });
-
-    $('.increment-btn').click(function (e) {
-        e.preventDefault();
-        var id = $(this).data('id');
-        
-        var inc_value = $('.qty-input').val();
-        var value = Number(inc_value, 1000);
-        value = isNaN(value) ? 0 : value;
-        if (value < 1000) {
-            value++;
-            $('.qty-input').val(value);
-        }
-    });
         $('#cart-items').on('click', '.cart-item-remove', function () {
             var id = $(this).data('id');
             $.ajax({

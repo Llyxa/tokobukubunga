@@ -83,7 +83,7 @@ class CartController extends Controller
             $cekdetail->transaction->updatetotal($cekdetail->transaction, $subtotal);
         } else {
             Cart::create([
-            'transaction_id' => 0,
+            'transaction_id' => $itemtransaksi->id,
             'user_id' => $itemuser,
             'product_id' => $itemproduk->id,
             'qty' => $qty,

@@ -56,13 +56,16 @@
                     @foreach ($produk as $item)
                     <div class="col">
                         <div class="card h-90">
+                            @can('admin')
                             <a href="{{route('produk.show', $item->id)}}" style="padding: 10px;">
-                                <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px;"/>
+                                <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px; padding: 15px;"/>
                             </a>
+                            @endcan
+                            <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px; padding: 15px;"/>
                             <div class="card-body">
                                 <p class="card-title font-weight-bolder mt-0 mb-1">{{$item->judul}}</p>
                                 <p class="card-text">{{$item->penulis}}</p>
-                                <p class="card-text">Rp. {{$item->harga}}</p>
+                                <p class="card-text">Rp. {{ number_format($item->harga) }}</p>
                             </div>
                         </div>
                         @can('user')
@@ -72,28 +75,14 @@
                                 $url = collect(str_split($url));
                                 $url = $url->splice(9)->implode('');
                             @endphp --}}
-                            {{-- <input type="hidden" class="product_id" value="{{$item->id}}" name="product_id" >{{$item->id}}
-                            <input type="hidden" name="product_id" value="{{ $url }}" class="product_id">
+                            {{-- <input type="hidden" data-id="{{$item->id}}" name="product_id">{{$item->id}} --}}
+                            {{-- <input type="hidden" value="{{$product->id}}" class="product_id" > --}}
+                            {{-- <input type="hidden" name="product_id" value="{{ $url }}" class="product_id"> --}}
                             <input type="hidden" name="user_id" value="{{ @ Auth::user()->id }}" class="user_id">
-                            <button type="button" class="btn btn-primary btn-cart btn-add-to-cart" >
+                            <button type="button" class="btn btn-primary btn-cart btn-add-to-cart" data-id="{{$item->id}}">
                                 <i data-feather="shopping-cart" class="mr-40"></i>
                                 <span class="add-to-cart">Add to cart</span>
-                            </button> --}}
-                            <form action="{{ route('cart.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="product_id" value={{$item->id}}>
-                                <button class="btn btn-block btn-primary" type="submit">
-                                    <i data-feather="shopping-cart" class="mr-40"></i>
-                                    <span class="add-to-cart">Add to cart</span>
-                                </button>
-                            </form>
-                            {{-- <form action="{{ route('cartdetail.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="produk_id" value={{$itemproduk->id}}>
-                                <button class="btn btn-block btn-primary" type="submit">
-                                <i class="fa fa-shopping-cart"></i> Tambahkan Ke Keranjang
-                                </button>
-                            </form> --}}
+                            </button>
                         </div>
                         @endcan
                     </div>
@@ -110,6 +99,23 @@
 
 @push('scripts')
 <script>
+$(document).ready(function () {
+    $('.btn-add-to-cart').click(function () {
+        var id = $(this).data('id');
+        var user_id = $('.user_id').val();
+        console.log(user_id);
+        $.ajax({
+            url: "{{route('cart.store')}}",
+            method: "POST",
+            data: {
+                'product_id' : id,
+                'user_id' : user_id,
+                _token: '{{csrf_token()}}'
+            }
+        });
+    });
+        
+});
 </script>
 @endpush
 
