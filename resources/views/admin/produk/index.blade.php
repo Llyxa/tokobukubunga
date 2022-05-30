@@ -55,29 +55,28 @@
                     {{-- {{dd($produk);}} --}}
                     @foreach ($produk as $item)
                     <div class="col">
+                        @can('admin')
                         <div class="card h-90">
-                            @can('admin')
                             <a href="{{route('produk.show', $item->id)}}" style="padding: 10px;">
-                                <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px; padding: 15px;"/>
+                                <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px; padding: 10px;"/>
                             </a>
-                            @endcan
-                            <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px; padding: 15px;"/>
                             <div class="card-body">
                                 <p class="card-title font-weight-bolder mt-0 mb-1">{{$item->judul}}</p>
                                 <p class="card-text">{{$item->penulis}}</p>
                                 <p class="card-text">Rp. {{ number_format($item->harga) }}</p>
                             </div>
                         </div>
+                        @endcan
                         @can('user')
+                        <div class="card h-90">
+                            <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px; padding: 10px;"/>
+                            <div class="card-body">
+                                <p class="card-title font-weight-bolder mt-0 mb-1">{{$item->judul}}</p>
+                                <p class="card-text">{{$item->penulis}}</p>
+                                <p class="card-text">Rp. {{ number_format($item->harga) }}</p>
+                            </div>
+                        </div>
                         <div class="text-center">
-                            {{-- @php
-                                $url =  $_SERVER["REQUEST_URI"];
-                                $url = collect(str_split($url));
-                                $url = $url->splice(9)->implode('');
-                            @endphp --}}
-                            {{-- <input type="hidden" data-id="{{$item->id}}" name="product_id">{{$item->id}} --}}
-                            {{-- <input type="hidden" value="{{$product->id}}" class="product_id" > --}}
-                            {{-- <input type="hidden" name="product_id" value="{{ $url }}" class="product_id"> --}}
                             <input type="hidden" name="user_id" value="{{ @ Auth::user()->id }}" class="user_id">
                             <button type="button" class="btn btn-primary btn-cart btn-add-to-cart" data-id="{{$item->id}}">
                                 <i data-feather="shopping-cart" class="mr-40"></i>
@@ -100,21 +99,57 @@
 @push('scripts')
 <script>
 $(document).ready(function () {
-    $('.btn-add-to-cart').click(function () {
+    $('.btn-add-to-cart').click(function (e) {
+        e.preventDefault();
         var id = $(this).data('id');
-        var user_id = $('.user_id').val();
-        console.log(user_id);
         $.ajax({
             url: "{{route('cart.store')}}",
-            method: "POST",
+            type: "POST",
             data: {
-                'product_id' : id,
-                'user_id' : user_id,
+                product_id: id,
                 _token: '{{csrf_token()}}'
+            }, 
+            success: function (response) {
+                window.location.reload();
             }
         });
     });
-        
+
+    $('#cart-items').on('click', '.btn-decrease', function (e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        var qty = parseInt($(this).data('qty'))-1;
+        $.ajax({
+            url: "{{url('cart')}}/"+id,
+            type: "POST",
+            data: {
+                qty: qty,
+                _token: '{{csrf_token()}}',
+                _method: 'PUT'
+            },
+            success: function (response) {
+                window.location.reload();
+            }
+        });
+    });
+
+    $('#cart-items').on('click', '.btn-increase', function (e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        var qty = parseInt($(this).data('qty'))+1;
+        $.ajax({
+            url: "{{url('cart')}}/"+id,
+            type: "POST",
+            data: {
+                qty: qty,
+                _token: '{{csrf_token()}}',
+                _method: 'PUT'
+            },
+            success: function (response) {
+                window.location.reload();
+            }
+        });
+    });
 });
 </script>
 @endpush

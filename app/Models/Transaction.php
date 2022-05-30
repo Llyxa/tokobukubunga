@@ -34,7 +34,6 @@ class Transaction extends Model
     }
 
     public function updatetotal($itemtransaksi, $subtotal) {
-        $this->attributes['subtotal'] = $itemtransaksi->subtotal + $subtotal;
         $this->attributes['total'] = $itemtransaksi->total + $subtotal;
         self::save();
     }

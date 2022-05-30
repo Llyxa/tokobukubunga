@@ -88,7 +88,7 @@
                             <div id="place-order" class="list-view product-checkout">
                                 <!-- Checkout Place Order Left starts -->
                                 <div class="checkout-items">
-                                    @foreach ($itemtransaksi->cart as $cart)
+                                    {{-- @foreach ($itemtransaksi->cart as $cart)
                                     <div class="card ecommerce-card">
                                         <div class="item-img">
                                             <a href="app-ecommerce-details.html">
@@ -115,13 +115,9 @@
                                                 <p class="card-text">Not Available
                                             @endif
                                             <h4 class="item-price">Rp. {{number_format($cart->$produk->harga)}}</h4>
-                                            {{-- <span class="text-success mb-1">In Stock </span> --}}
                                             <div class="item-quantity">
-                                                {{-- <input type="hidden" value="{{$product->id}}" class="product_id" > --}}
-                                                        {{-- <label for="quantity">Kuantitas</label> --}}
                                                         <div id="tambahkurang" >
                                                             <button class="btn btn-primary btn-sm decrement-btn" > - </button>
-                                                            {{-- <input type="hidden" data-id="{{$product->id}}" class="product_qty"> --}}
                                                             <input type="text" name="qty" class="text-center qty-input" value="1" style="width: 25px;" >
                                                             <button class="btn btn-primary btn-sm increment-btn" > + </button>
                                                         </div>
@@ -149,7 +145,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    @endforeach
+                                    @endforeach --}}
                                 </div>
                                 <!-- Checkout Place Order Left ends -->
 
@@ -405,119 +401,7 @@
 
 @push('scripts')
 <script>
-    const minusButton = document.getElementById('.decrement-btnn');
-    const plusButton = document.getElementById('.increment-btn');
-    const inputField = document.getElementById('.qty-input');
-    const input = document.getElementById('priceee')
-    
-    
-    $(inputField).on('keyup', () => {
-        const currentValue = Number(inputField.value);
-        if (currentValue != 0){
-            const price = $('.pricee').text('{{ $product->harga }}'* +inputField.value);
-            input.value = price.text();
-        }else{
-            $('.pricee').text('0');
-        }
-    })
-    minusButton.addEventListener('click', event => {
-        event.preventDefault();
-        const currentValue = Number(inputField.value) || 0;
-        if (currentValue != 0){
-            inputField.value = currentValue - 1;
-            const price = $('.pricee').text('{{ $product->harga }}'*+inputField.value);
-            input.value = price.text();
-        }else{
-            $('.pricee').text('0');
-        }
-        
-    });
-    
-    plusButton.addEventListener('click', event => {
-        event.preventDefault();
-        const currentValue = Number(inputField.value) || 0;
-        inputField.value = currentValue + 1;
-        const price = $('.pricee').text('{{ $product->harga }}'*+inputField.value);
-        input.value = price.text();
-    
-    });
-
-    $('#cart-items').on('click', '.cart-item-remove', function () {
-        var id = $(this).data('id');
-        $.ajax({
-            url: "{{url('cart')}}/"+id,
-            type: "POST",
-            data: {
-                _token: '{{csrf_token()}}',
-                _method: 'DELETE'
-            },
-            success: function (data) {
-                $('#cart-count').html(data.data.cart_item_count);
-                $('#cart-count-label').html(data.data.cart_item_count+" Items");
-                $('#cart-total').html(data.data.cart_total);
-                $('#cart-items').html(data.data.cart_items);
-                if (feather) {
-                    feather.replace({
-                        width: 14,
-                        height: 14
-                    });
-                }
-                toastr.success('Data berhasil dihapus!', 'Berhasil!', {
-                    closeButton: true,
-                    tapToDismiss: false
-                });
-            },
-            error: function (data) {
-                toastr.error('Terjadi kesalahan!', 'Gagal!', {
-                    closeButton: true,
-                    tapToDismiss: false
-                });
-            }
-        });
-    });
-
-    $(document).on('click', '.btn-del', function () {
-        var id = $(this).data('id');
-        Swal.fire({
-            icon: 'error',
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            type: 'error',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        })
-            .then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        'url': '{{url('produk')}}/' + id,
-                        'type': 'post',
-                        'data': {
-                            '_method': 'DELETE',
-                            '_token': '{{csrf_token()}}'
-                        },
-                        success: function (response) {
-                            if (response == 1) {
-                                toastr.error('Data gagal dihapus!', 'Gagal!', {
-                                    closeButton: true,
-                                    tapToDismiss: false
-                                });
-                            } else {
-                                toastr.success('Data berhasil dihapus!', 'Berhasil!', {
-                                    closeButton: true,
-                                    tapToDismiss: false
-                                });
-                                window.location = "http://localhost:8000/produk/";
-                            }
-                        }
-                    });
-                } else {
-                    console.log(`dialog was dismissed by ${result.dismiss}`)
-                }
-
-            });
-    });
+   
 </script>
 @endpush
 

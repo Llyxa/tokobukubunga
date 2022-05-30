@@ -15,6 +15,7 @@ class TransaksiController extends Controller
      */
     public function index(Request $request)
     {
+        // $data['keranjang'] = Cart::where('user_id', '=', Auth::user()->id)->get();
         $itemuser = Auth::user()->id;//ambil data user
         $itemtransaksi = Transaction::where('user_id', $itemuser)
         ->where('status_cart', 'transaction')

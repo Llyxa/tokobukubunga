@@ -97,36 +97,17 @@
     <script src="{{asset('assets')}}/admin/js/scripts/pages/app-ecommerce-checkout.js"></script>
     <!-- END: Page JS-->
 
-    <script>
-        $(window).on('load', function() {
-            if (feather) {
-                feather.replace({
-                    width: 14,
-                    height: 14
-                });
-            }
-        })
-        $(document).ready(function () {
-            @if(Session::has('success'))
-            var success = '{{Session::get("success")}}';
-            toastr.success(success, 'Berhasil!', {
-                closeButton: true,
-                tapToDismiss: false
-            });
-            @endif
-    
-        });
-        $(document).ready(function () {
-            @if(Session::has('error'))
-            var success = '{{Session::get("error")}}';
-            toastr.error(success, 'Gagal!', {
-                closeButton: true,
-                tapToDismiss: false
-            });
-            @endif
-        });
-    </script>
     @stack('scripts')
+    <script>
+    $(window).on('load', function() {
+        if (feather) {
+            feather.replace({
+                width: 14,
+                height: 14
+            });
+        }
+    })
+    </script>
 </body>
 <!-- END: Body-->
 
