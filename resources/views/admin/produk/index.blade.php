@@ -118,7 +118,7 @@ $(document).ready(function () {
     $('#cart-items').on('click', '.btn-decrease', function (e) {
         e.preventDefault();
         var id = $(this).data('id');
-        var qty = parseInt($(this).data('qty'))-1;
+        var qty = Number($(this).parent().find('.qty').text())-1; 
         $.ajax({
             url: "{{url('cart')}}/"+id,
             type: "POST",
@@ -128,7 +128,58 @@ $(document).ready(function () {
                 _method: 'PUT'
             },
             success: function (response) {
-                window.location.reload();
+                toastr.success(response.message, 'Berhasil!', {
+                        closeButton: true,
+                        tapToDismiss: false
+                    });
+                    $('#cart-items').html('');
+                    let rows = ''
+                    $.each(response.data.detail, function (idx, d) { 
+                        let disabled = "";
+                        if(d.qty <= 1)
+                            disabled = "disabled";
+                            rows += '<div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">' + 
+                                '<img class="d-block rounded mr-1" src="{{asset("storage/foto")}}/'+d.produk.image +'" style="max-height: 60px;min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >'+
+                                    '</div>' + 
+                                
+                                    '<div class="media-body">' +
+                                        '<i class="ficon cart-item-remove" data-feather="x" data-id="'+d.produk.id+'"></i>' +
+                                        '<div class="media-heading">' +
+                                            '<h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">'+d.produk.judul+'</a>' +
+                                        '</div>' +
+                                        '<div class="btn-group" role="group">' +
+                                            '<input type="hidden" class="product_id" value="'+d.id+'">'+
+                                            '<input type="hidden" name="param" value="kurang">'
+                                            '<button class="btn btn-primary btn-sm btn-decrease" data-id="'+d.id+'" data-qty="'+d.qty+'" '+disabled+'>' +
+                                            '-' +
+                                            '</button>' +
+                                            '<button class="btn btn-outline-primary btn-sm qty" disabled="true">'
+                                                +d.qty+
+                                            '</button>' +
+                                            '<input type="hidden" name="param" value="tambah">' +
+                                            '<button class="btn btn-primary btn-sm btn-increase" data-id="'+d.id+'" data-qty="'+d.produk.id+'">' +
+                                            '+' +
+                                            '</button>' +
+                                            '</div>' +
+                                            '<h5 class="cart-item-price">Rp ' +number_format(d.subtotal)+ '</h5>' +
+                                        '</div>' +
+                                    '</div>';
+                    })
+                    $('#cart-total').html('Rp'+(response.total));
+                    $('#cart-items').html(rows);
+                        
+                    if (feather) {
+                        feather.replace({
+                            width: 14,
+                            height: 14
+                        });
+                    }
+            },
+            error: function (data) {
+                toastr.error('Kuantitas produk gagal diubah', 'Gagal!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
             }
         });
     });
@@ -136,7 +187,8 @@ $(document).ready(function () {
     $('#cart-items').on('click', '.btn-increase', function (e) {
         e.preventDefault();
         var id = $(this).data('id');
-        var qty = parseInt($(this).data('qty'))+1;
+        var qty = Number($(this).parent().find('.qty').text())+1;
+        // var qty = parseInt($(this).data('qty'))+1;
         $.ajax({
             url: "{{url('cart')}}/"+id,
             type: "POST",
@@ -146,7 +198,58 @@ $(document).ready(function () {
                 _method: 'PUT'
             },
             success: function (response) {
-                window.location.reload();
+                toastr.success(response.message, 'Berhasil!', {
+                        closeButton: true,
+                        tapToDismiss: false
+                    });
+                    $('#cart-items').html('');
+                    let rows = ''
+                    $.each(response.data.detail, function (idx, d) { 
+                        let disabled = "";
+                        if(d.qty <= 1)
+                            disabled = "disabled";
+                            rows += '<div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">' + 
+                                '<img class="d-block rounded mr-1" src="{{asset("storage/foto")}}/'+d.produk.image +'" style="max-height: 60px;min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >'+
+                                    '</div>' + 
+                                
+                                    '<div class="media-body">' +
+                                        '<i class="ficon cart-item-remove" data-feather="x" data-id="'+d.produk.id+'"></i>' +
+                                        '<div class="media-heading">' +
+                                            '<h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">'+d.produk.judul+'</a>' +
+                                        '</div>' +
+                                        '<div class="btn-group" role="group">' +
+                                            '<input type="hidden" class="product_id" value="'+d.id+'">'+
+                                            '<input type="hidden" name="param" value="kurang">'
+                                            '<button class="btn btn-primary btn-sm btn-decrease" data-id="'+d.id+'" data-qty="'+d.qty+'" '+disabled+'>' +
+                                            '-' +
+                                            '</button>' +
+                                            '<button class="btn btn-outline-primary btn-sm qty" disabled="true">'
+                                                +d.qty+
+                                            '</button>' +
+                                            '<input type="hidden" name="param" value="tambah">' +
+                                            '<button class="btn btn-primary btn-sm btn-increase" data-id="'+d.id+'" data-qty="'+d.produk.id+'">' +
+                                            '+' +
+                                            '</button>' +
+                                            '</div>' +
+                                            '<h5 class="cart-item-price">Rp ' +number_format(d.subtotal)+ '</h5>' +
+                                        '</div>' +
+                                    '</div>';
+                    })
+                    $('#cart-total').html('Rp'+(response.total));
+                    $('#cart-items').html(rows);
+                        
+                    if (feather) {
+                        feather.replace({
+                            width: 14,
+                            height: 14
+                        });
+                    }
+            },
+            error: function (data) {
+                toastr.error('Kuantitas produk gagal diubah', 'Gagal!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
             }
         });
     });

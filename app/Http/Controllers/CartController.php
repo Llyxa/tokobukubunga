@@ -151,12 +151,31 @@ class CartController extends Controller
         
         $harga = $cart->find($request->id)->produk->harga;
         $priceTotal = $harga * $validatedData['qty'];
-        // $priceTotal = Cart::findOrFail($request->id)->produk->harga * $validatedData['qty'];
+        $priceTotal = Cart::findOrFail($request->id)->produk->harga * $validatedData['qty'];
         $cart->find($request->id)->update($validatedData);
         $cart->find($request->id)->update(['subtotal' => $priceTotal]);
 
 
         return response()->json("Cart updated");
+
+        $validatedData = $request->validate([
+            'qty' => 'required',
+        ]);
+        $subtotal = $cartdetail->harga * $validatedData['qty'];
+        $cartdetail->update($validatedData);
+        $cartdetail->update(['subtotal' => $subtotal]);
+
+        $itemuser = $request->user();
+        $allCart = Transaction::where('user_id', $itemuser->id)->with(['cart.produk'])->first();
+        $response = [
+            "status"=>"success",
+            "total"=>$cartdetail->sum('subtotal'),
+            "count"=>$cartdetail->count(),
+            "message"=>"Kuantitas berhasil dirubah",
+            "data"=>$allCart
+        ];
+        return response()->json($response);
+
     }
 
     /**
