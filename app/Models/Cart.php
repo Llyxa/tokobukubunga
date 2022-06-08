@@ -51,13 +51,10 @@ class Cart extends Model
     }
 
     // function untuk update qty, sama subtotal
-    public function updatedetail($itemdetail, $qty, $harga) {
-        $this->attributes['harga'] = $itemdetail->harga + $harga;
+    public function updatedetail($itemdetail, $qty, $subtotal) {
+        $this->attributes['subtotal'] = $itemdetail->subtotal + $subtotal;
         $this->attributes['qty'] = $itemdetail->qty + $qty;
         self::save();
     }
-
-
-    
 
 }

@@ -35,20 +35,20 @@
             </li>
             @can('user')
             <li class="nav-item dropdown dropdown-cart mr-25"><a class="nav-link" href="javascript:void(0);" data-toggle="dropdown"><i class="ficon" data-feather="shopping-cart"></i>
-                @if (@$keranjang->count() == null)
+                {{-- @if (@$keranjang->count() == null)
                 <span class="badge badge-pill badge-primary badge-up cart-item-count">0</span></a>
-                @else
-                <span class="badge badge-pill badge-primary badge-up cart-item-count">{{ @$keranjang->count() }}</span></a>
-                @endif
+                @else --}}
+                {{-- <span class="badge badge-pill badge-primary badge-up cart-item-count">{{ @$keranjang->count() }}</span></a> --}}
+                {{-- @endif --}}
                 <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                     <li class="dropdown-menu-header">
                         <div class="dropdown-header d-flex">
                             <h4 class="notification-title mb-0 mr-auto">My Cart</h4>
-                            @if (@$keranjang->count() == null)
+                            {{-- @if (@$keranjang->count() == null)
                             <div class="badge badge-pill badge-light-primary">0 Items</div>
                             @else
                             <div class="badge badge-pill badge-light-primary">{{ @$keranjang->count() }} Items</div>
-                            @endif
+                            @endif --}}
                         </div>
                     </li>
                     <li class="scrollable-container media-list" id="cart-items">
@@ -65,21 +65,20 @@
                                         {{$detail->produk->judul}}</a>
                                 </div>
                                 <div class="btn-group" role="group">
-                                    <input type="hidden" class="product_id" value="{{$detail->produk->id}}">
-                                    <button class="btn btn-primary btn-sm btn-decrease changeQuantity" data-id="{{$detail->id}}" data-qty="{{$detail->qty}}" 
-                                        {{$detail->qty<=1?'disabled':''}}>
+                                    <input type="hidden" name="param" value="kurang">
+                                    <button class="btn btn-primary btn-sm btn-decrease changeQuantity" data-id="{{$detail->id}}" data-qty="{{$detail->qty}}" {{$detail->qty<=1?'disabled':''}}>
                                     -
                                     </button>
                                     <button class="btn btn-outline-primary btn-sm" disabled="true">
                                         {{ number_format($detail->qty) }}
                                     </button>
-                                    <input type="hidden" name="param" value="tambah" id="tambah">
+                                    <input type="hidden" name="param" value="tambah">
                                     <button class="btn btn-primary btn-sm btn-increase changeQuantity" data-id="{{$detail->id}}" data-qty="{{$detail->qty}}">
                                     +
                                     </button>
                                     </div>
-                                    {{-- <h5 class="cart-item-price">Rp{{ number_format(($detail->qty) * ($detail->produk->harga)) }}</h5> --}}
-                                    <h5 class="cart-item-price">Rp{{ number_format(($detail->subtotal)) }}</h5>
+                                    <h5 class="cart-item-price">Rp{{ number_format(($detail->qty) * ($detail->produk->harga)) }}</h5>
+                                    {{-- <h5 class="cart-item-price">Rp{{ number_format(($detail->subtotal)) }}</h5> --}}
                             </div>
                         </div>
                     @endforeach
@@ -96,6 +95,7 @@
                     <li class="dropdown-menu-footer">
                         <div class="d-flex justify-content-between mb-1">
                             <h6 class="font-weight-bolder mb-0">Total: </h6>
+                            {{-- <h6 class="text-primary font-weight-bolder mb-0" id="cart-total">Rp. {{ number_format((($detail->qty) * ($detail->produk->harga)) * ) }}</h6> --}}
                             <h6 class="text-primary font-weight-bolder mb-0" id="cart-total">Rp. {{ number_format($total) }}</h6>
                         </div><a class="btn btn-primary btn-block" href="app-ecommerce-checkout.html">Checkout</a>
                     </li>

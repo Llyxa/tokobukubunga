@@ -99,8 +99,8 @@
 @push('scripts')
 <script>
 $(document).ready(function () {
-    $('.btn-add-to-cart').click(function (e) {
-        e.preventDefault();
+    $('.btn-add-to-cart').click(function () {
+        // e.preventDefault();
         var id = $(this).data('id');
         $.ajax({
             url: "{{route('cart.store')}}",

@@ -30,8 +30,6 @@ Illuminate\Support\Facades\Auth::routes();
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
     Route::resource('cart', \App\Http\Controllers\CartController::class);
-    // Route::post('/add-cart-item', [App\Http\Controllers\CartController::class, 'addproduct']);
-    // Route::post('/update-cart-item', [App\Http\Controllers\CartController::class, 'updateproduct']);
     Route::resource('transaksi', App\Http\Controllers\TransaksiController::class);
 
     Route::middleware('admin')->group(function () {
