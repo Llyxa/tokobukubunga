@@ -12,6 +12,16 @@
     .card:hover{
         transform: scale(1.03);
     }
+    div.a{
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    div.a:hover{
+        overflow: visible;
+        /* white-space: pre; */
+    }
+
 </style>
 
 <div class="app-content content ">
@@ -57,12 +67,12 @@
                     <div class="col">
                         @can('admin')
                         <div class="card h-90">
-                            <a href="{{route('produk.show', $item->id)}}" style="padding: 10px;">
+                            <a href="{{route('produk.show', $item->id)}}">
                                 <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px; padding: 10px;"/>
                             </a>
                             <div class="card-body">
-                                <p class="card-title font-weight-bolder mt-0 mb-1">{{$item->judul}}</p>
-                                <p class="card-text">{{$item->penulis}}</p>
+                                <div class="card-text a">{{$item->penulis}}</div>
+                                <div class="card-title font-weight-bolder mt-0 mb-1 a">{{$item->judul}}</div>
                                 <p class="card-text">Rp. {{ number_format($item->harga) }}</p>
                             </div>
                         </div>
@@ -71,8 +81,8 @@
                         <div class="card h-90">
                             <img class="card-img-top" src="{{ asset ('storage/foto/'. $item->image) }}" alt="Cover Image" style="object-fit: cover; border-radius: 6px; height:250px; padding: 10px;"/>
                             <div class="card-body">
-                                <p class="card-title font-weight-bolder mt-0 mb-1">{{$item->judul}}</p>
-                                <p class="card-text">{{$item->penulis}}</p>
+                                <div class="card-text a">{{$item->penulis}}</div>
+                                <div class="card-title font-weight-bolder mt-0 mb-1 a">{{$item->judul}}</div>
                                 <p class="card-text">Rp. {{ number_format($item->harga) }}</p>
                             </div>
                         </div>
@@ -110,13 +120,61 @@ $(document).ready(function () {
                 _token: '{{csrf_token()}}'
             }, 
             success: function (response) {
-                window.location.reload();
+                toastr.success(response.message, 'Berhasil!', {
+                        closeButton: true,
+                        tapToDismiss: false
+                    });
+                    $('#cart-items').html('');
+                    let rows = ''
+                    $.each(response.data.cart, function (idx, d) { 
+                        let disabled = "";
+                        if(d.qty <= 1)
+                            disabled = "disabled";
+                            rows += '<div class="col-12 col-md-12 mb-3">'+
+                                        '<div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">'+
+                                            '<img class="d-block rounded mr-1" src="{{asset("storage/foto")}}/'+d.produk.image +'" style="max-height: 60px;min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >'+
+                                        '</div>'+
+                                            '<div class="media-body">'+
+                                                '<i class="ficon cart-item-remove" data-feather="x" data-id="'+d.produk.id+'"></i>'+
+                                                '<div class="media-heading">'+
+                                                ' <h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">'+d.produk.judul+'</a>'+
+                                                '</div>'+
+                                            ' <div class="btn-group" role="group">'+
+                                                '<input type="hidden" class="product_id" value="'+d.id+'">'+
+                                                    '<input type="hidden" name="param" value="kurang">'+
+                                                    '<button class="btn btn-primary btn-sm btn-decrease" data-id="'+d.id+'" data-qty="'+d.qty+'" '+disabled+'>-'+
+                                                    '</button>'+
+                                                    '<button class="btn btn-outline-primary btn-sm" id="qty" disabled="true">'+d.qty+
+                                                    '</button>'+
+                                                    '<input type="hidden" name="param" value="tambah">'+
+                                                    '<button class="btn btn-primary btn-sm btn-increase" data-id="'+d.id+'" data-qty="'+d.produk.id+'">'+
+                                                    '+</button>'+
+                                                    '</div>'+
+                                                    '<h5 class="cart-item-price">Rp'+numberWithCommas(d.subtotal)+'</h5>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>';
+                    })
+                    $('#cart-total').html('Rp'+(response.total));
+                    $('#cart-items').html(rows);
+                        
+                    if (feather) {
+                        feather.replace({
+                            width: 14,
+                            height: 14
+                        });
+                    }
+            },
+            error: function (data) {
+                toastr.error('Produk gagal ditambahkan', 'Gagal!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
             }
         });
     });
 
-    $('#cart-items').on('click', '.btn-decrease', function (e) {
-        e.preventDefault();
+    $('#cart-items').on('click', '.btn-decrease', function () {
         var id = $(this).data('id');
         var qty = Number($(this).parent().find('.qty').text())-1; 
         $.ajax({
@@ -134,35 +192,33 @@ $(document).ready(function () {
                     });
                     $('#cart-items').html('');
                     let rows = ''
-                    $.each(response.data.detail, function (idx, d) { 
+                    $.each(response.data.cart, function (idx, d) { 
                         let disabled = "";
                         if(d.qty <= 1)
                             disabled = "disabled";
-                            rows += '<div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">' + 
-                                '<img class="d-block rounded mr-1" src="{{asset("storage/foto")}}/'+d.produk.image +'" style="max-height: 60px;min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >'+
-                                    '</div>' + 
-                                
-                                    '<div class="media-body">' +
-                                        '<i class="ficon cart-item-remove" data-feather="x" data-id="'+d.produk.id+'"></i>' +
-                                        '<div class="media-heading">' +
-                                            '<h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">'+d.produk.judul+'</a>' +
-                                        '</div>' +
-                                        '<div class="btn-group" role="group">' +
-                                            '<input type="hidden" class="product_id" value="'+d.id+'">'+
-                                            '<input type="hidden" name="param" value="kurang">'
-                                            '<button class="btn btn-primary btn-sm btn-decrease" data-id="'+d.id+'" data-qty="'+d.qty+'" '+disabled+'>' +
-                                            '-' +
-                                            '</button>' +
-                                            '<button class="btn btn-outline-primary btn-sm qty" disabled="true">'
-                                                +d.qty+
-                                            '</button>' +
-                                            '<input type="hidden" name="param" value="tambah">' +
-                                            '<button class="btn btn-primary btn-sm btn-increase" data-id="'+d.id+'" data-qty="'+d.produk.id+'">' +
-                                            '+' +
-                                            '</button>' +
-                                            '</div>' +
-                                            '<h5 class="cart-item-price">Rp ' +number_format(d.subtotal)+ '</h5>' +
-                                        '</div>' +
+                            rows += '<div class="col-12 col-md-12 mb-3">'+
+                                        '<div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">'+
+                                            '<img class="d-block rounded mr-1" src="{{asset("storage/foto")}}/'+d.produk.image +'" style="max-height: 60px;min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >'+
+                                        '</div>'+
+                                            '<div class="media-body">'+
+                                                '<i class="ficon cart-item-remove" data-feather="x" data-id="'+d.produk.id+'"></i>'+
+                                                '<div class="media-heading">'+
+                                                ' <h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">'+d.produk.judul+'</a>'+
+                                                '</div>'+
+                                            ' <div class="btn-group" role="group">'+
+                                                '<input type="hidden" class="product_id" value="'+d.id+'">'+
+                                                    '<input type="hidden" name="param" value="kurang">'+
+                                                    '<button class="btn btn-primary btn-sm btn-decrease" data-id="'+d.id+'" data-qty="'+d.qty+'" '+disabled+'>-'+
+                                                    '</button>'+
+                                                    '<button class="btn btn-outline-primary btn-sm" id="qty" disabled="true">'+d.qty+
+                                                    '</button>'+
+                                                    '<input type="hidden" name="param" value="tambah">'+
+                                                    '<button class="btn btn-primary btn-sm btn-increase" data-id="'+d.id+'" data-qty="'+d.produk.id+'">'+
+                                                    '+</button>'+
+                                                    '</div>'+
+                                                    '<h5 class="cart-item-price">Rp'+numberWithCommas(d.subtotal)+'</h5>'+
+                                            '</div>'+
+                                        '</div>'+
                                     '</div>';
                     })
                     $('#cart-total').html('Rp'+(response.total));
@@ -176,7 +232,7 @@ $(document).ready(function () {
                     }
             },
             error: function (data) {
-                toastr.error('Kuantitas produk gagal diubah', 'Gagal!', {
+                toastr.error('Produk gagal ditambahkan', 'Gagal!', {
                     closeButton: true,
                     tapToDismiss: false
                 });
@@ -184,11 +240,9 @@ $(document).ready(function () {
         });
     });
 
-    $('#cart-items').on('click', '.btn-increase', function (e) {
-        e.preventDefault();
+    $('#cart-items').on('click', '.btn-increase', function () {
         var id = $(this).data('id');
         var qty = Number($(this).parent().find('.qty').text())+1;
-        // var qty = parseInt($(this).data('qty'))+1;
         $.ajax({
             url: "{{url('cart')}}/"+id,
             type: "POST",
@@ -208,31 +262,29 @@ $(document).ready(function () {
                         let disabled = "";
                         if(d.qty <= 1)
                             disabled = "disabled";
-                            rows += '<div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">' + 
-                                '<img class="d-block rounded mr-1" src="{{asset("storage/foto")}}/'+d.produk.image +'" style="max-height: 60px;min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >'+
-                                    '</div>' + 
-                                
-                                    '<div class="media-body">' +
-                                        '<i class="ficon cart-item-remove" data-feather="x" data-id="'+d.produk.id+'"></i>' +
-                                        '<div class="media-heading">' +
-                                            '<h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">'+d.produk.judul+'</a>' +
-                                        '</div>' +
-                                        '<div class="btn-group" role="group">' +
-                                            '<input type="hidden" class="product_id" value="'+d.id+'">'+
-                                            '<input type="hidden" name="param" value="kurang">'
-                                            '<button class="btn btn-primary btn-sm btn-decrease" data-id="'+d.id+'" data-qty="'+d.qty+'" '+disabled+'>' +
-                                            '-' +
-                                            '</button>' +
-                                            '<button class="btn btn-outline-primary btn-sm qty" disabled="true">'
-                                                +d.qty+
-                                            '</button>' +
-                                            '<input type="hidden" name="param" value="tambah">' +
-                                            '<button class="btn btn-primary btn-sm btn-increase" data-id="'+d.id+'" data-qty="'+d.produk.id+'">' +
-                                            '+' +
-                                            '</button>' +
-                                            '</div>' +
-                                            '<h5 class="cart-item-price">Rp ' +number_format(d.subtotal)+ '</h5>' +
-                                        '</div>' +
+                            rows += '<div class="col-12 col-md-12 mb-3">'+
+                                        '<div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">'+
+                                            '<img class="d-block rounded mr-1" src="{{asset("storage/foto")}}/'+d.produk.image +'" style="max-height: 60px;min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >'+
+                                        '</div>'+
+                                            '<div class="media-body">'+
+                                                '<i class="ficon cart-item-remove" data-feather="x" data-id="'+d.produk.id+'"></i>'+
+                                                '<div class="media-heading">'+
+                                                ' <h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">'+d.produk.judul+'</a>'+
+                                                '</div>'+
+                                            ' <div class="btn-group" role="group">'+
+                                                '<input type="hidden" class="product_id" value="'+d.id+'">'+
+                                                    '<input type="hidden" name="param" value="kurang">'+
+                                                    '<button class="btn btn-primary btn-sm btn-decrease" data-id="'+d.id+'" data-qty="'+d.qty+'" '+disabled+'>-'+
+                                                    '</button>'+
+                                                    '<button class="btn btn-outline-primary btn-sm" id="qty" disabled="true">'+d.qty+
+                                                    '</button>'+
+                                                    '<input type="hidden" name="param" value="tambah">'+
+                                                    '<button class="btn btn-primary btn-sm btn-increase" data-id="'+d.id+'" data-qty="'+d.produk.id+'">'+
+                                                    '+</button>'+
+                                                    '</div>'+
+                                                    '<h5 class="cart-item-price">Rp'+number_format(d.subtotal)+'</h5>'+
+                                            '</div>'+
+                                        '</div'+
                                     '</div>';
                     })
                     $('#cart-total').html('Rp'+(response.total));
@@ -246,14 +298,80 @@ $(document).ready(function () {
                     }
             },
             error: function (data) {
-                toastr.error('Kuantitas produk gagal diubah', 'Gagal!', {
+                toastr.error('Produk gagal ditambahkan', 'Gagal!', {
                     closeButton: true,
                     tapToDismiss: false
                 });
             }
         });
     });
+
+    $('#cart-items').on('click', '.btn-del', function () {
+        var id = $(this).data('id');
+        $.ajax({
+            url: "{{url('cart')}}/"+id,
+            type: "POST",
+            data: {
+                _token: '{{csrf_token()}}',
+                _method: 'DELETE'
+            },
+            success: function (response) {
+                toastr.success(response.message, 'Berhasil!', {
+                        closeButton: true,
+                        tapToDismiss: false
+                    });
+                    $('#cart-items').html('');
+                    let rows = ''
+                    $.each(response.data.detail, function (idx, d) { 
+                        let disabled = "";
+                        if(d.qty <= 1)
+                            disabled = "disabled";
+                            rows += '<div class="col-12 col-md-12 mb-3">'+
+                                        '<div class="media align-items-center"><div class="panel-heading" style="text-align: center; overflow: hidden; padding: 0;">'+
+                                            '<img class="d-block rounded mr-1" src="{{asset("image/foto")}}/'+d.produk.foto +'" style="max-height: 60px;min-height:60px; max-width: 60px; min-width:60px; object-fit:cover;" class="image-fluid card-img-top "  alt="..." >'+
+                                        '</div>'+
+                                            '<div class="media-body">'+
+                                                '<i class="ficon cart-item-remove" id="btn-del" data-feather="x" data-id="'+d.id+'"></i>'+
+                                                '<div class="media-heading">'+
+                                                ' <h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">'+d.produk.nama+'</a>'+
+                                                '</div>'+
+                                            ' <div class="btn-group" role="group">'+
+                                                '<input type="hidden" class="product_id" value="'+d.id+'">'+
+                                                    '<input type="hidden" name="param" value="kurang">'+
+                                                    '<button class="btn btn-primary btn-sm btn-decrease" data-id="'+d.id+'" data-qty="'+d.qty+'" '+disabled+'>-'+
+                                                    '</button>'+
+                                                    '<button class="btn btn-outline-primary btn-sm" id="qty" disabled="true">'+d.qty+
+                                                    '</button>'+
+                                                    '<input type="hidden" name="param" value="tambah">'+
+                                                    '<button class="btn btn-primary btn-sm btn-increase" data-id="'+d.id+'" data-qty="'+d.produk.id+'">'+
+                                                    '+</button>'+
+                                                    '</div>'+
+                                                    '<h5 class="cart-item-price">Rp'+numberWithCommas(d.subtotal)+'</h5>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>';
+                    })
+                    $('#cart-total').html('Rp'+(response.total)); console.log(response);
+                    $('#cart-count').html((response.count));
+                    $('#cart-items').html(rows);
+                        
+                    if (feather) {
+                        feather.replace({
+                            width: 14,
+                            height: 14
+                        });
+                    }
+            },
+            error: function (data) {
+                toastr.error('Produk gagal dihapus', 'Gagal!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+            }
+        });
+    });
+
+
 });
 </script>
 @endpush
-

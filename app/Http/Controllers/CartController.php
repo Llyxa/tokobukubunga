@@ -42,10 +42,7 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            // 'user_id' => 'required',
             'product_id' => 'required',
-            // 'qty' => 'required',
-            // 'subtotal' => 'required'
         ]);
         $itemuser = Auth::user()->id;
         $itemproduk = Product::findOrFail($request->product_id);
@@ -144,33 +141,19 @@ class CartController extends Controller
      */
     public function update(Request $request, Cart $cart)
     {
-        dd($request->all());
         $validatedData = $request->validate([
             'qty' => 'required',
         ]);
-        
-        $harga = $cart->find($request->id)->produk->harga;
-        $priceTotal = $harga * $validatedData['qty'];
-        $priceTotal = Cart::findOrFail($request->id)->produk->harga * $validatedData['qty'];
-        $cart->find($request->id)->update($validatedData);
-        $cart->find($request->id)->update(['subtotal' => $priceTotal]);
-
-
-        return response()->json("Cart updated");
-
-        $validatedData = $request->validate([
-            'qty' => 'required',
-        ]);
-        $subtotal = $cartdetail->harga * $validatedData['qty'];
-        $cartdetail->update($validatedData);
-        $cartdetail->update(['subtotal' => $subtotal]);
+        $subtotal = $cart->produk->harga * $validatedData['qty'];
+        $cart->update($validatedData);
+        $cart->update(['subtotal' => $subtotal]);
 
         $itemuser = $request->user();
         $allCart = Transaction::where('user_id', $itemuser->id)->with(['cart.produk'])->first();
         $response = [
             "status"=>"success",
-            "total"=>$cartdetail->sum('subtotal'),
-            "count"=>$cartdetail->count(),
+            "total"=>$cart->sum('subtotal'),
+            "count"=>$cart->count(),
             "message"=>"Kuantitas berhasil dirubah",
             "data"=>$allCart
         ];
@@ -184,21 +167,25 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id, Request $request)
+    {   
         $itemdetail = Cart::findOrFail($id);
         // update total cart dulu
         $itemdetail->transaction->updatetotal($itemdetail->transaction, '-'.$itemdetail->subtotal);
-        // if ($itemdetail->delete()) {
-        //     return back()->with('success', 'Item berhasil dihapus');
-        // } else {
-        //     return back()->with('error', 'Item gagal dihapus');
-        // }
-        if ($itemdetail){
-            return redirect()->route('produk.index')->with('success','Produk berhasil dihapus dari cart');
-        }else{
-            return redirect()->route('produk.index')->with('error','Produk gagal dihapus dari cart');
-        }
+        $itemdetail->delete();
+
+        $itemuser = $request->user();
+        $allCart = Transaction::where('user_id', $itemuser->id)->with(['cart.produk']);
+        $cart = $allCart->cart;
+        $response = [
+            "status"=>"success",
+            "message"=>"Produk dihapus",
+            "total"=>$cart->sum('subtotal'),
+            "count"=>$cart->count(),
+            "data"=>$allCart
+        ];
+        return response()->json($response);
+
     }
 }
 

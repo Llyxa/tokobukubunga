@@ -14,6 +14,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
+                            @can('admin')
                             <h2 class="content-header-title float-left mb-0">Data produk</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
@@ -23,6 +24,18 @@
                                     </li>
                                 </ol>
                             </div>
+                            @endcan
+                            @can('user')
+                            <h2 class="content-header-title float-left mb-0">List Produk</h2>
+                            <div class="breadcrumb-wrapper">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/produk">List Produk</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">Detail produk
+                                    </li>
+                                </ol>
+                            </div>
+                            @endcan
                         </div>
                     </div>
                 </div>
@@ -115,115 +128,6 @@
                             </div>
                             <!-- Product Details ends -->
                         </div>
-                    
-                        @can('user')
-                        <!-- Transaction Card -->
-                        <div class="card col-lg-6">
-                            <div class="card card-transaction">
-                                <div class="card-header">
-                                    <h5 class="mb-0">Atur Jumlah</h5>
-                                </div>
-                                <div class="card-body">
-                                    {{-- <div class="transaction-item">
-                                        <div class="media">
-                                            <div class="media-body">
-                                                <h2>Kuantitas: </h2><input type="text" name="kuantitas" value="" onkeyup="OnChange(this.value)" onKeyPress="return isNumberKey(event)">
-                                            </div>
-                                        </div>
-                                    </div> <hr /> --}}
-                                    <div class="transaction-item">
-                                        <div class="media">
-                                            <div class="item-quantity">
-                                                    {{-- @can('user') --}}
-                                                    <div class="">
-                                                        {{-- <label for="quantity">Kuantitas</label> --}}
-                                                        <div id="tambahkurang" >
-                                                            <button class="btn btn-primary btn-sm decrement-btn" > - </button>
-                                                            {{-- <input type="hidden" data-id="{{$product->id}}" class="product_qty"> --}}
-                                                            <input type="text" name="qty" class="text-center qty-input" value="1" style="width: 25px;" disabled>
-                                                            <button class="btn btn-primary btn-sm increment-btn" > + </button>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    {{-- @endcan --}}
-                                                    {{-- <div class="d-flex justify-content-end">
-                                                        Total : Rp. <p class="disabled pricee d-inline-block">0</p>
-                                                        <input type="hidden" id="priceee" name="price_total">
-                                                    </div> --}}
-                                            </div>
-                                        </div>
-                                    </div><hr />
-                                    {{-- <div class="transaction-items">
-                                        <div class="media">user
-                                            <div class="media-body">
-                                                <h2>Subtotal: </h2>
-                                                <input type="text" name="total_harga" value="" disabled="" >
-                                            </div>
-                                        </div>
-                                    </div><hr /> --}}
-                                    <div class="transaction-item">
-                                        <div class="media">
-                                            <div class="media-body">
-                                                {{-- @php
-                                                $url =  $_SERVER["REQUEST_URI"];
-                                                $url = collect(str_split($url));
-                                                $url = $url->splice(9)->implode('');
-                                            @endphp
-
-                                            <input type="hidden" name="product_id" value="{{ $url }}"> --}}
-                                            <input type="hidden" value="{{$product->id}}" class="product_id" >
-                                            <input type="hidden" name="user_id" value="{{ @ Auth::user()->id }}" class="user_id">
-
-                                                <button type="button" class="btn btn-primary btn-cart btn-add-to-cart" >
-                                                    <i data-feather="shopping-cart" class="mr-40"></i>
-                                                    <span class="add-to-cart">Add to cart</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    {{-- </div>
-                                    <div class="transaction-item"> --}}
-                                        <div class="media">
-                                            <div class="media-body">
-                                                <a href="/transaksi" class="btn btn-primary mr-0 mr-sm-1 mb-1 mb-sm-0">
-                                                    <span class="">Buy Now</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    {{-- </div>
-                                    <div class="transaction-item"> --}}
-                                        <div class="media">
-                                            <div class="media-body">
-                                                <a href="javascript:void(0)" class="btn btn-outline-secondary btn-wishlist mr-0 mr-sm-1 mb-1 mb-sm-0">
-                                                    <i data-feather="heart" class="mr-50"></i>
-                                                    <span>Wishlist</span>
-                                                </a>
-                                                <div class="btn-group dropdown-icon-wrapper btn-share">
-                                                    <button type="button" class="btn btn-icon hide-arrow btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i data-feather="share-2"></i>
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="javascript:void(0)" class="dropdown-item">
-                                                            <i data-feather="facebook"></i> Facebook
-                                                        </a>
-                                                        <a href="javascript:void(0)" class="dropdown-item">
-                                                            <i data-feather="twitter"></i> Twitter
-                                                        </a>
-                                                        <a href="javascript:void(0)" class="dropdown-item">
-                                                            <i data-feather="youtube"></i> Youtube
-                                                        </a>
-                                                        <a href="javascript:void(0)" class="dropdown-item">
-                                                            <i data-feather="instagram"></i> Instagram
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/ Transaction Card -->
-                        @endcan
 
                         <!-- Related Products starts -->
                             {{-- <div class="card-body">
